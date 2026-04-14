@@ -4,71 +4,143 @@ namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
 use App\Models\Track;
-use App\Models\Artist;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use SimpleSoftwareIO\QrCode\Facades\QrCode;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
 class TrackUploadController extends Controller
 {
+    use AuthorizesRequests;
+
+    /**
+     * Visualizza la lista delle tracce
+     */
+    public function index()
+    {
+        $user = Auth::user();
+        
+        if (!$user->artist) {
+            return redirect()->route('user.studio')->with('error', 'Devi configurare il tuo profilo prima di gestire le tracce.');
+        }
+
+        $tracks = $user->artist->tracks()->latest()->get();
+        return view('user.tracks.index', compact('tracks'));
+    }
+
+    /**
+     * Caricamento nuova traccia
+     */
     public function store(Request $request)
     {
-        // dd($request->all(), $request->file('audio_file')); 
-        // 1. Validazione (aggiunto audio_file per coerenza con il form)
         $request->validate([
             'title' => 'required|string|max:255',
-            'audio_file' => 'required|mimes:mp3,wav,ogg|max:20480', 
+            'audio_file' => 'required|mimes:mp3,wav,ogg|max:51200', // 50MB
             'genre' => 'required|string',
+            'version' => 'nullable|string|max:100',
             'bpm' => 'nullable|integer',
         ]);
 
-        // 2. Controllo Artista
-        $artist = Artist::where('user_id', auth()->id())->first();
+        $artist = Auth::user()->artist;
         
         if (!$artist) {
-            return back()->with('error', 'Devi prima completare il tuo profilo artista!');
+            return back()->with('error', 'Completa prima il tuo profilo artista nello studio!');
         }
 
-        // 3. Salvataggio File Audio
+        // Salvataggio File Audio
         $path = $request->file('audio_file')->store('tracks/audio', 'public');
 
-        // 4. Generazione Slug e URL
+        // Generazione Slug unico
         $slug = Str::slug($request->title . '-' . Str::random(5));
         $trackUrl = url('/track/' . $slug);
 
-        // 5. Generazione & Salvataggio QR Code (CORRETTO)
-        $qrName = 'qrcode-' . $slug . '.svg';
-        $qrPath = 'tracks/qrcodes/' . $qrName;
-        
-        // Generiamo il contenuto del QR
+        // Generazione QR Code (Verde Acido Rude-Hz)
+        $qrPath = 'tracks/qrcodes/qrcode-' . $slug . '.svg';
         $qrCodeContent = QrCode::size(300)
-            ->color(217, 255, 0) // Verde Acido #d9ff00
+            ->color(217, 255, 0) // #d9ff00
             ->backgroundColor(10, 10, 10)
             ->format('svg')
             ->generate($trackUrl);
 
-        // Salviamo il file tramite lo Storage
         Storage::disk('public')->put($qrPath, $qrCodeContent);
 
-        // 6. Salvataggio nel Database
+        // Creazione Record
         Track::create([
+            'user_id' => Auth::id(),
+            'artist_id' => $artist->id,
             'title' => $request->title,
             'slug' => $slug,
-            'version' => $request->version ?? 'Original Mix', // Aggiunto per il tuo form
+            'version' => $request->version ?? 'Original Mix',
             'genre' => $request->genre,
             'bpm' => $request->bpm,
-            'release_year' => $request->release_year ?? date('Y'),
-            'label' => $request->label,
-            'isrc_code' => $request->isrc_code,
             'file_path' => $path,
             'qr_code_path' => $qrPath,
-            'user_id' => auth()->id(),
-            'artist_id' => $artist->id,
             'is_approved' => false,
-            'is_featured' => false,
+            'release_year' => date('Y'),
         ]);
 
-        return back()->with('success', 'Traccia caricata con successo! Ora è in attesa di validazione.');
+        return back()->with('success', 'Traccia inviata con successo! In attesa di convalida.');
+    }
+
+    /**
+     * Pagina di Modifica (Il metodo che mancava)
+     */
+    public function edit(Track $track)
+    {
+        // Verifica proprietà (o tramite user_id o tramite artist_id)
+        if ($track->user_id !== Auth::id()) {
+            abort(403, 'Azione non autorizzata.');
+        }
+
+        return view('user.tracks.edit', compact('track'));
+    }
+
+    /**
+     * Aggiornamento Metadati
+     */
+    public function update(Request $request, Track $track)
+    {
+        if ($track->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'bpm' => 'nullable|integer',
+            'genre' => 'required|string',
+            'version' => 'nullable|string|max:100',
+        ]);
+
+        $track->update($validated);
+
+        // Se aggiorni il titolo, potresti voler rigenerare lo slug, 
+        // ma per ora manteniamo quello esistente per non rompere i QR code già stampati.
+
+        return redirect()->route('user.tracks.index')->with('success', 'Metadati aggiornati con successo.');
+    }
+
+    /**
+     * Eliminazione totale file e record
+     */
+    public function destroy(Track $track)
+    {
+        if ($track->user_id !== Auth::id()) {
+            abort(403);
+        }
+
+        // Rimozione file fisici
+        $files = [$track->file_path, $track->qr_code_path];
+        
+        foreach ($files as $file) {
+            if ($file && Storage::disk('public')->exists($file)) {
+                Storage::disk('public')->delete($file);
+            }
+        }
+
+        $track->delete();
+
+        return back()->with('success', 'Traccia e file rimossi definitivamente.');
     }
 }

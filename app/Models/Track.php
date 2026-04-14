@@ -16,11 +16,26 @@ class Track extends Model
     protected $guarded = [];
 
     /**
-     * Relazione: Ogni brano appartiene a un artista.
-     * Fondamentale per Filament e per mostrare il nome dell'artista nel Player.
+     * Ottieni l'utente che ha caricato la traccia.
      */
-    public function artist(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(Artist::class);
+        return $this->belongsTo(\App\Models\User::class);
     }
+
+    /**
+     * Ottieni l'artista collegato alla traccia.
+     */
+    public function artist()
+    {
+        return $this->belongsTo(\App\Models\Artist::class);
+    }
+
+    public function contests(): BelongsToMany
+{
+    return $this->belongsToMany(Contest::class)
+                ->withPivot('accepted_legal_terms', 'accepted_at', 'status')
+                ->withTimestamps();
 }
+}
+    

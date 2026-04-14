@@ -1,0 +1,11 @@
+[90m= [39m[34;4mApp\Models\User[39;24m {#9453
+    [34mid[39m: [35m1[39m,
+    [34mname[39m: [32m"[39m[32mFabioteck Admin[39m[32m"[39m,
+    [34memail[39m: [32m"[39m[32mfrigeriwki@gmail.com[39m[32m"[39m,
+    [34memail_verified_at[39m: [36mnull[39m,
+    #[33mpassword[39m: [32m"[39m\$[32m2y[39m\$[32m12[39m\$[32m1TiaSPYKQZbJRcprKT50.u7YhN5U1WvtL3jGSVlB2C/ucAilcFktG[39m[32m"[39m,
+    #[33mremember_token[39m: [32m"[39m[32m3lD8BLSzAEBiyXCQxI4f4mohwEX520DAaQ9pR9IQA2mAaA3yM8Ki39YY3BcA[39m[32m"[39m,
+    [34mcreated_at[39m: [32m"[39m[32m2026-04-06 15:17:17[39m[32m"[39m,
+    [34mupdated_at[39m: [32m"[39m[32m2026-04-07 15:00:56[39m[32m"[39m,
+    [34mis_admin[39m: [35m1[39m,
+  }

@@ -3,63 +3,84 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\News;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        //
+        $news = News::orderBy('created_at', 'desc')->paginate(15);
+        return view('admin.news.index', compact('news'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
-        //
+        return view('admin.news.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        //
+        // 1. Validazione (Le regole sono fondamentali per non far crashare Laravel)
+        $request->validate([]);
+
+        // 2. Creazione news
+        $news = new News();
+        $news->title = $request->title;
+        $news->slug = Str::slug($request->title);
+        $news->content = $request->content;
+        $news->is_published = $request->has('is_published');
+        
+        // 3. User ID obbligatorio (Evita l'errore SQL Integrity constraint violation)
+        $news->user_id = auth()->id(); 
+
+        // 4. Gestione Immagine
+        if ($request->hasFile('image')) {
+            $news->image_path = $request->file('image')->store('news', 'public');
+        }
+
+        $news->save();
+
+        return redirect()->route('admin.news.index')->with('success', 'News pubblicata!');
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function edit(News $news)
     {
-        //
+        return view('admin.news.edit', compact('news'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, News $news)
     {
-        //
+        // Validazione anche per l'aggiornamento
+        $request->validate([]);
+
+        $news->title = $request->title;
+        $news->slug = Str::slug($request->title);
+        $news->content = $request->content;
+        $news->is_published = $request->has('is_published');
+
+        if ($request->hasFile('image')) {
+            if ($news->image_path) {
+                Storage::disk('public')->delete($news->image_path);
+            }
+            $news->image_path = $request->file('image')->store('news', 'public');
+        }
+
+        $news->save();
+
+        return redirect()->route('admin.news.index')->with('success', 'News aggiornata correttamente.');
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    public function destroy(News $news)
     {
-        //
-    }
+        if ($news->image_path) {
+            Storage::disk('public')->delete($news->image_path);
+        }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $news->delete();
+
+        return redirect()->route('admin.news.index')->with('warning', 'News eliminata.');
     }
 }

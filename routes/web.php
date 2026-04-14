@@ -1,121 +1,100 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\User\TrackUploadController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Http\Request;
-use App\Models\Artist;
-use App\Models\Track;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
+use App\Models\{Track, Artist, News, Contest};
+use App\Http\Controllers\WelcomeController;
 
-/*
+// Import Controller
+use App\Http\Controllers\ProfileController;
 
-|--------------------------------------------------------------------------
-| Web Routes - Rude-Hz.it (Professional War Room Edition)
-|--------------------------------------------------------------------------
-*/
+/* --- 1. AREA PUBBLICA --- */
+Route::get('/track/{slug}', [WelcomeController::class, 'showTrack'])->name('track.public.show');
 
-// --- 1. ROTTE PUBBLICHE (FRONT-END) ---
 Route::get('/', function () {
-    $artists = Artist::all();
-    $tracks = Track::where('is_approved', true)->latest()->get();
-    return view('welcome', compact('artists', 'tracks'));
+    $tracks = Track::where('is_approved', true)->with('artist')->latest()->get();
+    $artists = Artist::latest()->get();
+    $latestNews = News::latest()->first();
+    $otherNews = News::latest()->skip(1)->take(5)->get();
+    return view('welcome', compact('tracks', 'artists', 'latestNews', 'otherNews'));
 })->name('home');
 
-Route::get('/artisti', function () {
-    $artists = Artist::latest()->paginate(12);
-    return view('artists.index', compact('artists'));
-})->name('artists.index');
+Route::get('/news', [\App\Http\Controllers\NewsController::class, 'index'])->name('news.index');
+Route::get('/news/{slug}', [\App\Http\Controllers\NewsController::class, 'show'])->name('news.show');
+Route::get('/artists/{artist:slug}', [\App\Http\Controllers\ArtistController::class, 'show'])->name('artists.show');
+Route::get('/contests', [\App\Http\Controllers\ContestController::class, 'index'])->name('contests.index');
+Route::get('/contests/{slug}', [\App\Http\Controllers\ContestController::class, 'show'])->name('contests.show');
 
-Route::get('/tracce', function () {
-    $tracks = Track::where('is_approved', true)->latest()->paginate(20);
-    return view('tracks.index', compact('tracks'));
-})->name('tracks.index');
-
-Route::get('/news', function () {
-    return view('news.index'); // Qui poi caricheremo le news dal DB
-})->name('news.index');
-
-
-// --- 2. AREA UTENTE / ARTISTA (DASHBOARD & UPLOAD) ---
-Route::middleware(['auth', 'verified'])->group(function () {
+/* --- 2. AREA PRIVATA --- */
+Route::middleware(['auth'])->group(function () {
     
+    // Switcher Dashboard
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return auth()->user()->is_admin ? redirect()->route('admin.dashboard') : redirect()->route('user.studio');
     })->name('dashboard');
 
-    // Gestione Account (Standard Breeze)
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Logout
+    Route::get('/exit', function (Request $request) {
+        Auth::logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    })->name('logout.get');
 
-    // Creazione Profilo Artista
-    Route::post('/create-artist', function (Request $request) {
-        $request->validate(['name' => 'required|string|max:255']);
-        $data = $request->all();
-        $data['user_id'] = auth()->id();
-        $data['slug'] = Str::slug($request->name . '-' . rand(100, 999));
+    // Profilo Breeze
+    Route::prefix('profile')->name('profile.')->group(function () {
+        Route::get('/', [ProfileController::class, 'edit'])->name('edit');
+        Route::patch('/', [ProfileController::class, 'update'])->name('update');
+        Route::delete('/', [ProfileController::class, 'destroy'])->name('destroy');
+    });
 
-        if ($request->hasFile('profile_image')) {
-            $data['profile_image'] = $request->file('profile_image')->store('artists/avatars', 'public');
-        }
-
-        Artist::create($data);
-        return redirect()->route('dashboard')->with('success', 'Profilo Artistico Creato!');
-    })->name('artist.store');
-
-    // Caricamento Tracce
-    Route::post('/upload-track', [TrackUploadController::class, 'store'])->name('track.store');
-    
-    // Edit Traccia Utente (Per cambiare titolo/BPM delle proprie tracce)
-    Route::patch('/user/tracks/{track}', function (Request $request, Track $track) {
-        if ($track->user_id !== auth()->id()) abort(403);
-        $track->update($request->only(['title', 'bpm', 'genre', 'version']));
-        return back()->with('success', 'Traccia aggiornata!');
-    })->name('user.track.update');
-
-    // Caricamento Tracce
-    Route::get('/archivio-tracce', function () {
-        // Prendiamo solo quelle approvate che sono attualmente sul player/front-end
-        $approvedTracks = \App\Models\Track::where('is_approved', true)->with('artist')->latest()->get();
-        return view('admin.tracks-archive', compact('approvedTracks'));
-    })->name('admin.tracks.archive');
-});
-
-
-// --- 3. AREA ADMIN (MODERAZIONE, EDIT TOTALE, CANCELLAZIONE) ---
-Route::middleware(['auth'])->prefix('admin')->group(function () {
-    
-    // Dashboard Moderazione (Quella che abbiamo già)
-    Route::get('/moderazione', function () {
-        $pendingTracks = Track::where('is_approved', false)->with('artist')->latest()->get();
-        $allArtists = Artist::withCount('tracks')->get();
-        return view('admin.moderation', compact('pendingTracks', 'allArtists'));
-    })->name('admin.moderation');
-
-    // APPROVAZIONE
-    Route::patch('/approve-track/{track}', function (Track $track) {
-        $track->update(['is_approved' => true]);
-        return back()->with('success', "Traccia '{$track->title}' pubblicata!");
-    })->name('admin.track.approve');
-
-    // CANCELLAZIONE TOTALE (File + DB)
-    Route::delete('/delete-track/{track}', function (Track $track) {
-        // Eliminiamo i file dal Raspberry per non finire lo spazio
-        if ($track->file_path) Storage::disk('public')->delete($track->file_path);
-        if ($track->qr_code_path) Storage::disk('public')->delete($track->qr_code_path);
+    /* --- MY STUDIO (ARTISTA) --- */
+    Route::middleware(['can:user-only'])->prefix('my-studio')->group(function () {
         
-        $track->delete();
-        return back()->with('success', 'Traccia e file eliminati per sempre.');
-    })->name('admin.track.destroy');
+        Route::get('/', function () {
+            $user = auth()->user();
+            $artist = Artist::firstOrCreate(
+                ['user_id' => $user->id], 
+                ['name' => $user->name, 'slug' => Str::slug($user->name . '-' . $user->id), 'style' => 'default']
+            );
+            $tracks = Track::where('user_id', $user->id)->latest()->get();
+            return view('user.studio', compact('tracks', 'artist', 'user'));
+        })->name('user.studio');
 
-    // EDIT ARTISTA (Se l'admin deve correggere bio o social di qualcuno)
-    Route::patch('/artist/{artist}', function (Request $request, Artist $artist) {
-        $artist->update($request->all());
-        return back()->with('success', 'Profilo artista aggiornato dall\'admin.');
-    })->name('admin.artist.update');
+        // Rotte Tracce con i nomi esatti richiesti dal Blade (user.track.update/destroy)
+        Route::get('/tracks', [\App\Http\Controllers\User\TrackUploadController::class, 'index'])->name('user.tracks.index');
+        Route::post('/upload-track', [\App\Http\Controllers\User\TrackUploadController::class, 'store'])->name('track.store');
+        Route::patch('/tracks/{track}', [\App\Http\Controllers\User\TrackUploadController::class, 'update'])->name('user.track.update');
+        Route::delete('/tracks/{track}', [\App\Http\Controllers\User\TrackUploadController::class, 'destroy'])->name('user.track.destroy');
+            Route::get('/tracks/{track}/edit', [App\Http\Controllers\User\TrackUploadController::class, 'edit'])->name('user.track.edit');
+        // Altre azioni Studio
+        Route::post('/update-artist', [\App\Http\Controllers\ArtistController::class, 'updateArtist'])->name('user.update.artist');
+        Route::post('/contests/{contest}/join', [\App\Http\Controllers\ContestController::class, 'join'])->name('contests.join');
+    });
 
+    /* --- CONSOLE ADMIN --- */
+    Route::middleware(['can:admin-only'])->prefix('admin')->name('admin.')->group(function () {
+        
+        Route::get('/', [\App\Http\Controllers\Admin\RadioController::class, 'index'])->name('dashboard');
+        
+        Route::prefix('radio')->name('radio.')->group(function () {
+            Route::get('/moderation', [\App\Http\Controllers\Admin\RadioController::class, 'moderation'])->name('moderation');
+            Route::get('/archive', [\App\Http\Controllers\Admin\RadioController::class, 'archive'])->name('archive');
+            Route::patch('/approve/{track}', [\App\Http\Controllers\Admin\RadioController::class, 'toggleApprove'])->name('approve');
+            Route::delete('/destroy/{track}', [\App\Http\Controllers\Admin\RadioController::class, 'destroy'])->name('destroy');
+        });
+
+        // Risorse Admin
+        Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
+        Route::resource('contests', \App\Http\Controllers\Admin\ContestController::class);
+        Route::resource('artists', \App\Http\Controllers\Admin\ArtistController::class)->parameters(['artists' => 'artist']);
+        
+        // Moderazione Contest
+        Route::get('/contests/{contest}/participants', [\App\Http\Controllers\Admin\ContestController::class, 'participants'])->name('contests.participants');
+        Route::patch('/contests/{contest}/tracks/{track}/status', [\App\Http\Controllers\Admin\ContestController::class, 'updateTrackStatus'])->name('contests.update-status');
+    });
 });
 
 require __DIR__.'/auth.php';

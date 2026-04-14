@@ -1,117 +1,78 @@
-<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
-    <!-- Primary Navigation Menu -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16">
-            <div class="flex">
-                <!-- Logo -->
-                <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
-                    </a>
+@if(auth()->check() && auth()->user()->is_admin)
+    <!-- NAV ADMIN BREEZE STYLE (BIANCO PULITO) -->
+    <nav class="bg-white border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <!-- Logo -->
+                    <div class="shrink-0 flex items-center">
+                        <a href="{{ route('admin.dashboard') }}" class="font-bold text-gray-900 tracking-tighter text-lg">
+                            Rude-Hz  <span class="text-[10px] bg-gray-100 px-2 py-0.5 rounded ml-1 text-gray-500 uppercase tracking-widest font-medium"> Admin </span>
+                        </a>
+                    </div>
+
+                    <!-- Menu Centrale Admin con Padding a sinistra per centrarlo meglio -->
+                    <div class="hidden space-x-10 sm:-my-px sm:ml-20 sm:flex">
+                        <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                            Dashboard
+                        </x-nav-link>
+
+                        <x-nav-link href="/admin/artists" :active="request()->is('admin/artists*')">
+                            Artisti
+                        </x-nav-link>
+
+                        <!-- MODERAZIONE PUNTA A /MODERATION -->
+                        <x-nav-link href="/admin/radio/moderation" :active="request()->is('admin/radio/moderation*')">
+                            Moderazione
+                        </x-nav-link>
+
+                        <!-- TRACCE PUNTA A /ARCHIVE -->
+                        <x-nav-link href="/admin/radio/archive" :active="request()->is('admin/radio/archive*')">
+                            Tracce
+                        </x-nav-link>
+
+                        <x-nav-link href="/admin/contests" :active="request()->is('admin/contests*')">
+                            Contest
+                        </x-nav-link>
+
+                        <x-nav-link href="/admin/news" :active="request()->is('admin/news*')">
+                            News
+                        </x-nav-link>
+                    </div>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                        {{ __('Dashboard') }}
-                    </x-nav-link>
-
-                    <!-- Link agli Artisti -->
-                    <x-nav-link href="/admin/artists" :active="request()->is('admin/artists')">
-                        {{ __('Artisti') }}
-                    </x-nav-link>
-
-                    <!-- Link alla Musica -->
-                    <x-nav-link href="/admin/tracks" :active="request()->is('admin/tracks')">
-                        {{ __('Tracce') }}
-                    </x-nav-link>
-
-                    <x-nav-link href="/admin/posts" :active="request()->is('admin/posts')">
-                        {{ __('News') }}
-                    </x-nav-link>
-
-
-                </div>
-            </div>
-
-            <!-- Settings Dropdown -->
-            <div class="hidden sm:flex sm:items-center sm:ms-6">
-                <x-dropdown align="right" width="48">
-                    <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
-                            <div>{{ Auth::user()->name }}</div>
-
-                            <div class="ms-1">
-                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
-                                </svg>
-                            </div>
+                <!-- User & Logout -->
+                <div class="hidden sm:flex sm:items-center sm:ml-6 space-x-6">
+                    <span class="text-sm font-medium text-gray-500">{{ Auth::user()->name }}</span>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="text-sm font-bold text-red-600 hover:text-red-800 transition">
+                            Esci
                         </button>
-                    </x-slot>
-
-                    <x-slot name="content">
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Profile') }}
-                        </x-dropdown-link>
-
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log Out') }}
-                            </x-dropdown-link>
-                        </form>
-                    </x-slot>
-                </x-dropdown>
-            </div>
-
-            <!-- Hamburger -->
-            <div class="-me-2 flex items-center sm:hidden">
-                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
-                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                    </form>
+                </div>
             </div>
         </div>
-    </div>
-
-    <!-- Responsive Navigation Menu -->
-    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
-            </x-responsive-nav-link>
-        </div>
-
-        <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+    </nav>
+@else
+    <!-- NAV FRONTEND (IL TUO DESIGN NERO) -->
+    <nav class="bg-black py-6 px-4 sm:px-8 border-b border-white/5">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center">
+                <a href="/" class="text-2xl font-black tracking-tighter text-[#d9ff00]">Rude-Hz.it</a>
             </div>
-
-            <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
-
-                <!-- Authentication -->
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-
-                    <x-responsive-nav-link :href="route('logout')"
-                            onclick="event.preventDefault();
-                                        this.closest('form').submit();">
-                        {{ __('Log Out') }}
-                    </x-responsive-nav-link>
-                </form>
+            <div class="hidden md:flex items-center space-x-10">
+                <a href="#news" class="text-[11px] font-black uppercase tracking-[0.2em] text-white hover:text-[#d9ff00]">News</a>
+                <a href="#artisti" class="text-[11px] font-black uppercase tracking-[0.2em] text-white hover:text-[#d9ff00]">Artisti</a>
+                <a href="#tracce" class="text-[11px] font-black uppercase tracking-[0.2em] text-white hover:text-[#d9ff00]">Tracce</a>
+            </div>
+            <div class="flex items-center space-x-8">
+                @auth
+                    <a href="{{ Auth::user()->is_admin ? route('admin.dashboard') : route('user.studio') }}" class="text-[11px] font-black uppercase text-white hover:text-[#d9ff00]">
+                        {{ Auth::user()->is_admin ? 'Panel Admin' : 'My Studio' }}
+                    </a>
+                @endauth
             </div>
         </div>
-    </div>
-</nav>
+    </nav>
+@endif
