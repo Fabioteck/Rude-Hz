@@ -9,9 +9,7 @@
                 The Harder <br> <span class="text-[#d9ff00]">Side of Sound</span>
             </h1>
             <p class="text-gray-400 text-lg mb-8">La community tekno nata dai social.</p>
-            <div class="flex justify-center gap-4">
-                <a href="#radio" class="bg-white text-black px-8 py-4 rounded-full font-bold uppercase tracking-widest hover:bg-[#d9ff00] transition">Ascolta</a>
-            </div>
+
         </div>
     </section>
 

@@ -26,7 +26,7 @@
             <div class="bg-gray-950 border border-lime-900/10 p-6 rounded-sm">
                 <h3 class="text-lime-400 font-bold uppercase text-sm mb-4 italic underline decoration-lime-900">Ultimi Upload da Moderare</h3>
                 <p class="text-gray-600 text-xs italic">Nessuna traccia in coda al momento.</p>
-                <a href="{{ route('admin.radio.moderation') }}" class="inline-block mt-6 text-[10px] uppercase font-bold text-lime-500 hover:tracking-widest transition-all">Accedi alla Moderazione &rarr;</a>
+                <a href="{{ route('admin.radio.archive') }}" class="inline-block mt-6 text-[10px] uppercase font-bold text-lime-500 hover:tracking-widest transition-all">Accedi alla Moderazione &rarr;</a>
             </div>
         </div>
     </div>

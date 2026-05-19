@@ -1,0 +1,270 @@
+.
+├── CLAUDE.md
+├── README.md
+├── _admin = true
+├── app
+│   ├── Filament
+│   │   └── Resources
+│   │       ├── ArtistResource
+│   │       │   └── Pages
+│   │       │       ├── CreateArtist.php
+│   │       │       ├── EditArtist.php
+│   │       │       └── ListArtists.php
+│   │       ├── ArtistResource.php
+│   │       ├── PostResource
+│   │       │   └── Pages
+│   │       │       ├── CreatePost.php
+│   │       │       ├── EditPost.php
+│   │       │       └── ListPosts.php
+│   │       ├── PostResource.php
+│   │       ├── TrackResource
+│   │       │   └── Pages
+│   │       │       ├── CreateTrack.php
+│   │       │       ├── EditTrack.php
+│   │       │       └── ListTracks.php
+│   │       └── TrackResource.php
+│   ├── Http
+│   │   ├── Controllers
+│   │   │   ├── Admin
+│   │   │   │   ├── ArtistController.php
+│   │   │   │   ├── ContestController.php
+│   │   │   │   ├── NewsController.php
+│   │   │   │   └── RadioController.php
+│   │   │   ├── ArtistController.php
+│   │   │   ├── Auth
+│   │   │   │   ├── AuthenticatedSessionController.php
+│   │   │   │   ├── ConfirmablePasswordController.php
+│   │   │   │   ├── EmailVerificationNotificationController.php
+│   │   │   │   ├── EmailVerificationPromptController.php
+│   │   │   │   ├── NewPasswordController.php
+│   │   │   │   ├── PasswordController.php
+│   │   │   │   ├── PasswordResetLinkController.php
+│   │   │   │   ├── RegisteredUserController.php
+│   │   │   │   └── VerifyEmailController.php
+│   │   │   ├── ContestController.php
+│   │   │   ├── Controller.php
+│   │   │   ├── DashboardController.php
+│   │   │   ├── NewsController.php
+│   │   │   ├── ProfileController.php
+│   │   │   ├── PublicContestController.php
+│   │   │   ├── User
+│   │   │   │   └── TrackUploadController.php
+│   │   │   └── WelcomeController.php
+│   │   └── Requests
+│   │       ├── Auth
+│   │       │   └── LoginRequest.php
+│   │       └── ProfileUpdateRequest.php
+│   ├── Livewire
+│   │   └── Player.php
+│   ├── Models
+│   │   ├── Artist.php
+│   │   ├── Contest.php
+│   │   ├── News.php
+│   │   ├── Post.php
+│   │   ├── Track.php
+│   │   └── User.php
+│   ├── Providers
+│   │   ├── AppServiceProvider.php
+│   │   └── Filament
+│   │       └── AdminPanelProvider.php
+│   └── View
+│       └── Components
+│           ├── AdminLayout.php
+│           ├── AppLayout.php
+│           └── GuestLayout.php
+├── artisan
+├── composer.json
+├── composer.lock
+├── config
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── filesystems.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── music.php
+│   ├── queue.php
+│   ├── services.php
+│   └── session.php
+├── database
+│   ├── database.sqlite
+│   ├── factories
+│   │   └── UserFactory.php
+│   ├── migrations
+│   │   ├── 0001_01_01_000000_create_users_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000002_create_jobs_table.php
+│   │   ├── 2026_04_02_101320_create_artists_table.php
+│   │   ├── 2026_04_02_101321_create_posts_table.php
+│   │   ├── 2026_04_06_151001_update_artists_table_with_social_and_crypto.php
+│   │   ├── 2026_04_06_152844_add_missing_fields_to_artists_table.php
+│   │   ├── 2026_04_06_153628_add_user_id_to_artists_table.php
+│   │   ├── 2026_04_06_171627_create_news_table.php
+│   │   ├── 2026_04_06_212108_create_news_table.php
+│   │   ├── 2026_04_06_213436_add_is_admin_to_users_table.php
+│   │   ├── 2026_04_07_155536_add_rotation_to_tracks_table.php
+│   │   ├── 2026_04_09_193534_add_approved_at_to_tracks_table.php
+│   │   ├── 2026_04_14_132611_create_contests_table.php
+│   │   ├── 2026_04_14_133003_create_contest_track_table.php
+│   │   ├── 2026_04_15_115738_add_radio_flags_to_tracks_table.php
+│   │   └── create_traks_table.php
+│   └── seeders
+│       ├── DatabaseSeeder.php
+│       └── UserSeeder.php
+├── is_admin
+├── mappa_progetto.txt
+├── package-lock.json
+├── package.json
+├── phpunit.xml
+├── postcss.config.js
+├── public
+│   ├── build
+│   │   ├── assets
+│   │   │   ├── app-5iy6r8bp.js
+│   │   │   └── app-D9aRILnT.css
+│   │   └── manifest.json
+│   ├── css
+│   │   └── filament
+│   │       ├── filament
+│   │       │   └── app.css
+│   │       ├── forms
+│   │       │   └── forms.css
+│   │       └── support
+│   │           └── support.css
+│   ├── favicon.ico
+│   ├── index.php
+│   ├── js
+│   │   └── filament
+│   │       ├── filament
+│   │       │   ├── app.js
+│   │       │   └── echo.js
+│   │       ├── forms
+│   │       │   └── components
+│   │       │       ├── color-picker.js
+│   │       │       ├── date-time-picker.js
+│   │       │       ├── file-upload.js
+│   │       │       ├── key-value.js
+│   │       │       ├── markdown-editor.js
+│   │       │       ├── rich-editor.js
+│   │       │       ├── select.js
+│   │       │       ├── tags-input.js
+│   │       │       └── textarea.js
+│   │       ├── notifications
+│   │       │   └── notifications.js
+│   │       ├── support
+│   │       │   └── support.js
+│   │       ├── tables
+│   │       │   └── components
+│   │       │       └── table.js
+│   │       └── widgets
+│   │           └── components
+│   │               ├── chart.js
+│   │               └── stats-overview
+│   │                   └── stat
+│   │                       └── chart.js
+│   └── robots.txt
+├── resources
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   ├── app.js
+│   │   └── bootstrap.js
+│   └── views
+│       ├── admin
+│       │   ├── artists
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   ├── contests
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   └── index.blade.php
+│       │   ├── dashboard.blade.php
+│       │   ├── news
+│       │   │   ├── create.blade.php
+│       │   │   ├── edit.blade.php
+│       │   │   ├── index.blade.php
+│       │   │   └── show.blade.php
+│       │   └── radio
+│       │       ├── archive.blade.php
+│       │       ├── index.blade.php
+│       │       ├── moderation.blade.php
+│       │       └── playlist.blade.php
+│       ├── artist
+│       │   └── show.blade.php
+│       ├── auth
+│       │   ├── confirm-password.blade.php
+│       │   ├── forgot-password.blade.php
+│       │   ├── login.blade.php
+│       │   ├── register.blade.php
+│       │   ├── reset-password.blade.php
+│       │   └── verify-email.blade.php
+│       ├── components
+│       │   ├── admin-layout.blade.php
+│       │   ├── admin-sidebar.blade.php
+│       │   ├── application-logo.blade.php
+│       │   ├── auth-session-status.blade.php
+│       │   ├── danger-button.blade.php
+│       │   ├── dropdown-link.blade.php
+│       │   ├── dropdown.blade.php
+│       │   ├── input-error.blade.php
+│       │   ├── input-label.blade.php
+│       │   ├── modal.blade.php
+│       │   ├── nav-link.blade.php
+│       │   ├── primary-button.blade.php
+│       │   ├── responsive-nav-link.blade.php
+│       │   ├── secondary-button.blade.php
+│       │   └── text-input.blade.php
+│       ├── contests
+│       │   ├── index.blade.php
+│       │   └── show.blade.php
+│       ├── dashboard.blade.php
+│       ├── layouts
+│       │   ├── admin.blade.php
+│       │   ├── app.blade.php
+│       │   ├── frontend.blade.php
+│       │   ├── guest.blade.php
+│       │   └── navigation.blade.php
+│       ├── livewire
+│       │   └── player.blade.php
+│       ├── news
+│       │   ├── index.blade.php
+│       │   └── show.blade.php
+│       ├── profile
+│       │   ├── edit.blade.php
+│       │   ├── liberatoria.blade.php
+│       │   └── partials
+│       │       ├── delete-user-form.blade.php
+│       │       ├── update-password-form.blade.php
+│       │       └── update-profile-information-form.blade.php
+│       ├── user
+│       │   ├── studio.blade.php
+│       │   └── tracks
+│       │       ├── edit.blade.php
+│       │       ├── index.blade.php
+│       │       └── show.blade.php
+│       └── welcome.blade.php
+├── routes
+│   ├── auth.php
+│   ├── console.php
+│   └── web.php
+├── tailwind.config.js
+├── tests
+│   ├── Feature
+│   │   ├── Auth
+│   │   │   ├── AuthenticationTest.php
+│   │   │   ├── EmailVerificationTest.php
+│   │   │   ├── PasswordConfirmationTest.php
+│   │   │   ├── PasswordResetTest.php
+│   │   │   ├── PasswordUpdateTest.php
+│   │   │   └── RegistrationTest.php
+│   │   ├── ExampleTest.php
+│   │   └── ProfileTest.php
+│   ├── TestCase.php
+│   └── Unit
+│       └── ExampleTest.php
+└── vite.config.js
+
+74 directories, 194 files

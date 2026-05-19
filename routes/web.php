@@ -6,8 +6,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use App\Models\{Track, Artist, News, Contest};
 use App\Http\Controllers\WelcomeController;
-
-// Import Controller
 use App\Http\Controllers\ProfileController;
 
 /* --- 1. AREA PUBBLICA --- */
@@ -63,15 +61,20 @@ Route::middleware(['auth'])->group(function () {
             return view('user.studio', compact('tracks', 'artist', 'user'));
         })->name('user.studio');
 
-        // Rotte Tracce con i nomi esatti richiesti dal Blade (user.track.update/destroy)
         Route::get('/tracks', [\App\Http\Controllers\User\TrackUploadController::class, 'index'])->name('user.tracks.index');
         Route::post('/upload-track', [\App\Http\Controllers\User\TrackUploadController::class, 'store'])->name('track.store');
         Route::patch('/tracks/{track}', [\App\Http\Controllers\User\TrackUploadController::class, 'update'])->name('user.track.update');
         Route::delete('/tracks/{track}', [\App\Http\Controllers\User\TrackUploadController::class, 'destroy'])->name('user.track.destroy');
-            Route::get('/tracks/{track}/edit', [App\Http\Controllers\User\TrackUploadController::class, 'edit'])->name('user.track.edit');
-        // Altre azioni Studio
+        Route::get('/tracks/{track}/edit', [App\Http\Controllers\User\TrackUploadController::class, 'edit'])->name('user.track.edit');
+        
         Route::post('/update-artist', [\App\Http\Controllers\ArtistController::class, 'updateArtist'])->name('user.update.artist');
         Route::post('/contests/{contest}/join', [\App\Http\Controllers\ContestController::class, 'join'])->name('contests.join');
+    });
+
+    // LIBERATORIA
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/liberatoria', [ProfileController::class, 'editLiberatoria'])->name('profile.liberatoria');
+        Route::post('/liberatoria', [ProfileController::class, 'updateLiberatoria'])->name('profile.liberatoria.update');
     });
 
     /* --- CONSOLE ADMIN --- */
@@ -79,11 +82,16 @@ Route::middleware(['auth'])->group(function () {
         
         Route::get('/', [\App\Http\Controllers\Admin\RadioController::class, 'index'])->name('dashboard');
         
+        // GESTIONE RADIO (CENTRALE)
         Route::prefix('radio')->name('radio.')->group(function () {
-            Route::get('/moderation', [\App\Http\Controllers\Admin\RadioController::class, 'moderation'])->name('moderation');
+            // Archivio Unificato (Include la logica di Moderazione)
             Route::get('/archive', [\App\Http\Controllers\Admin\RadioController::class, 'archive'])->name('archive');
             Route::patch('/approve/{track}', [\App\Http\Controllers\Admin\RadioController::class, 'toggleApprove'])->name('approve');
             Route::delete('/destroy/{track}', [\App\Http\Controllers\Admin\RadioController::class, 'destroy'])->name('destroy');
+
+            // Nuova Sezione Playlist per Player MP3
+            Route::get('/playlist', [\App\Http\Controllers\Admin\RadioController::class, 'playlist'])->name('playlist');
+            Route::post('/playlist/update', [\App\Http\Controllers\Admin\RadioController::class, 'updatePlaylist'])->name('playlist.update');
         });
 
         // Risorse Admin

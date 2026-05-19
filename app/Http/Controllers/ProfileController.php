@@ -57,4 +57,21 @@ class ProfileController extends Controller
 
         return Redirect::to('/');
     }
+
+    public function editLiberatoria() {
+    return view('profile.liberatoria');
+}
+
+public function updateLiberatoria(Request $request) {
+    $request->validate([
+        'real_name' => 'required|string|max:255',
+        'tax_code' => 'required|string|max:16',
+        'accepted_terms' => 'accepted',
+    ]);
+
+    auth()->user()->update($request->only('real_name', 'tax_code'));
+
+    return back()->with('status', 'Liberatoria aggiornata con successo!');
+}
+
 }

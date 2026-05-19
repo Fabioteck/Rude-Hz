@@ -10,81 +10,112 @@ use Illuminate\Support\Facades\Storage;
 class RadioController extends Controller
 {
     /**
-     * Dashboard Radio: Riepilogo statistiche e coda rapida.
+     * Dashboard Generale Admin
      */
     public function index()
     {
-        $pendingTracksCount = Track::where('is_approved', false)->count();
-        $totalTracks = Track::count();
-        $approvedTracksCount = Track::where('is_approved', true)->count();
-
-        // Carica i pendenti per la tabella rapida in Dashboard
-        $pendingTracks = Track::with('user')
-            ->where('is_approved', false)
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
-
-        return view('admin.radio.index', compact(
-            'pendingTracks', 
-            'pendingTracksCount', 
-            'totalTracks', 
-            'approvedTracksCount'
-        ));
+        // Nota: Assicurati che il percorso del file sia corretto (solitamente admin.dashboard)
+        return view('admin.dashboard'); 
     }
 
     /**
-     * Visualizza la coda di moderazione specifica.
-     */
-    public function moderation()
-    {
-        $pendingTracks = Track::with('user')
-            ->where('is_approved', false)
-            ->orderBy('created_at', 'desc')
-            ->paginate(15);
-
-        return view('admin.radio.moderation', compact('pendingTracks'));
-    }
-
-    /**
-     * Visualizza l'archivio completo di tutte le tracce.
+     * ARCHIVIO UNIFICATO (Moderazione + Gestione Generale)
+     * Carica tutte le tracce indipendentemente dallo stato.
      */
     public function archive()
     {
-        $tracks = Track::with('user')
-            ->orderBy('created_at', 'desc')
-            ->paginate(30);
-
-        return view('admin.radio.tracks-archive', compact('tracks'));
+        $tracks = Track::with('artist')->latest()->get();
+        return view('admin.radio.archive', compact('tracks'));
     }
 
     /**
-     * Approva o mette in pausa una traccia.
+     * SELEZIONE PLAYLIST OPERATIVA
+     * Mostra solo le tracce che hanno superato la moderazione (is_approved = true).
+     */
+    public function playlist()
+    {
+        $approvedTracks = Track::where('is_approved', true)
+                                ->with('artist')
+                                ->orderBy('title', 'asc')
+                                ->get();
+
+        return view('admin.radio.playlist', compact('approvedTracks'));
+    }
+
+    /**
+     * SALVATAGGIO PLAYLIST & GENERAZIONE JSON PER RASPBERRY
+     */
+    public function updatePlaylist(Request $request)
+    {
+        // 1. Reset: Nessuna traccia è in playlist
+        Track::query()->update(['in_playlist' => false]);
+
+        // 2. Attivazione tracce selezionate
+        if ($request->has('playlist')) {
+            Track::whereIn('id', $request->playlist)
+                 ->update(['in_playlist' => true]);
+        }
+
+        // 3. Sincronizzazione File JSON per il Player MP3
+        $this->syncRaspberryPlaylist();
+
+        return back()->with('success', 'Playlist aggiornata e file JSON generato per il Raspberry!');
+    }
+
+    /**
+     * TOGGLE APPROVAZIONE (Moderazione rapida dall'archivio)
      */
     public function toggleApprove(Track $track)
     {
-        $newState = !$track->is_approved;
-
         $track->update([
-            'is_approved' => $newState,
-            'approved_at' => $newState ? now() : null,
+            'is_approved' => !$track->is_approved
         ]);
 
-        $message = $newState ? 'Traccia approvata e messa in onda!' : 'Traccia rimossa dalla rotazione.';
-        
-        return back()->with('success', $message);
+        // Se rimuovo l'approvazione, la tolgo automaticamente anche dalla playlist operativa
+        if (!$track->is_approved) {
+            $track->update(['in_playlist' => false]);
+            $this->syncRaspberryPlaylist();
+        }
+
+        $status = $track->is_approved ? 'Approvata' : 'Spostata in Coda';
+        return back()->with('success', "Traccia $status con successo.");
     }
 
     /**
-     * Elimina definitivamente file (da storage/RPi) e record DB.
+     * ELIMINAZIONE TRACCIA
      */
     public function destroy(Track $track)
     {
-        if ($track->file_path && Storage::disk('public')->exists($track->file_path)) {
-            Storage::disk('public')->delete($track->file_path);
-        }
-
+        // Rimuovo il file fisico se necessario prima di eliminare il record
+        // Storage::disk('public')->delete($track->file_path);
+        
         $track->delete();
+        
+        // Aggiorno il JSON perché una traccia è sparita
+        $this->syncRaspberryPlaylist();
 
-        return back()->with('warning', 'Traccia eliminata definitivamente.');
+        return back()->with('success', 'Traccia rimossa definitivamente dall\'archivio.');
+    }
+
+    /**
+     * FUNZIONE PRIVATA DI SINCRONIZZAZIONE
+     * Crea un file JSON leggibile dal Raspberry Pi 4
+     */
+    private function syncRaspberryPlaylist()
+    {
+        $playlistData = Track::where('in_playlist', true)
+            ->with('artist:id,name')
+            ->get()
+            ->map(function ($track) {
+                return [
+                    'id' => $track->id,
+                    'title' => $track->title,
+                    'artist' => $track->artist->name ?? 'Unknown',
+                    'url' => asset('storage/' . $track->file_path), // URL assoluto per il player
+                ];
+            });
+
+        // Salvataggio in storage/app/public/playlist.json
+        Storage::disk('public')->put('radio/playlist.json', json_encode($playlistData, JSON_PRETTY_PRINT));
     }
 }
