@@ -16,7 +16,10 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin', // AGGIUNTO: permette il salvataggio del ruolo
+        'is_admin',
+        'real_name',
+        'tax_code',
+        'accepted_terms',
     ];
 
     protected $hidden = [

@@ -1,85 +1,86 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Crea Nuova News') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <div class="max-w-4xl mx-auto px-4 py-8 w-full mt-6 bg-white rounded-lg shadow-sm">
+        
+        <h2 class="text-2xl font-black text-black uppercase tracking-tight italic mb-8">Crea Nuova News</h2>
+        
+        <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
 
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-8 border">
-                
-                <form action="{{ route('admin.news.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                    @csrf
-
-                    <!-- Titolo -->
-                    <div>
-                        <label for="title" class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Titolo della News</label>
-                        <input type="text" name="title" id="title" required value="{{ old('title') }}"
-                               class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                               placeholder="Inserisci un titolo accattivante...">
-                        @error('title') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Immagine di Copertina con Preview -->
-                    <div x-data="{ photoName: null, photoPreview: null }">
-                        <label class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Immagine di Copertina</label>
-                        
-                        <!-- Preview Box -->
-                        <div class="mt-2 flex items-center gap-4">
-                            <div class="relative w-40 h-24 bg-gray-100 rounded-lg border-2 border-dashed border-gray-300 flex items-center justify-center overflow-hidden">
-                                <template x-if="photoPreview">
-                                    <img :src="photoPreview" class="object-cover w-full h-full">
-                                </template>
-                                <template x-if="!photoPreview">
-                                    <span class="text-gray-400 text-xs">Nessuna immagine</span>
-                                </template>
-                            </div>
-                            
-                            <input type="file" name="image" id="image" class="hidden" 
-                                   x-ref="photo"
-                                   @change="
-                                        photoName = $refs.photo.files[0].name;
-                                        const reader = new FileReader();
-                                        reader.onload = (e) => { photoPreview = e.target.result; };
-                                        reader.readAsDataURL($refs.photo.files[0]);
-                                   ">
-                            
-                            <button type="button" @click.prevent="$refs.photo.click()" 
-                                    class="bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none">
-                                Seleziona File
-                            </button>
-                        </div>
-                        @error('image') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Contenuto (Textarea semplice o predisposta per Editor) -->
-                    <div>
-                        <label for="content" class="block text-sm font-bold text-gray-700 uppercase tracking-wider">Contenuto dell'articolo</label>
-                        <textarea name="content" id="content" rows="10" required
-                                  class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                                  placeholder="Scrivi qui il corpo della news...">{{ old('content') }}</textarea>
-                        @error('content') <p class="text-red-500 text-xs mt-1">{{ $message }}</p> @enderror
-                    </div>
-
-                    <!-- Toggle Pubblicazione -->
-                    <div class="flex items-center">
-                        <input type="checkbox" name="is_published" id="is_published" value="1" checked
-                               class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="is_published" class="ml-2 block text-sm text-gray-900 font-medium">
-                            Pubblica immediatamente su Rude-Hz.it
-                        </label>
-                    </div>
-
-                    <!-- Bottone Invia -->
-                    <div class="pt-4 border-t flex justify-end">
-                        <button type="submit" class="bg-black hover:bg-gray-800 text-white font-black py-3 px-8 rounded-full uppercase tracking-tighter transition shadow-lg">
-                            Pubblica News 🚀
-                        </button>
-                    </div>
-                </form>
-
+            <!-- Titolo -->
+            <div>
+                <label for="title" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Titolo della News</label>
+                <input type="text" name="title" id="title" required value="{{ old('title') }}"
+                       class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                       placeholder="Titolo accattivante...">
+                @error('title') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
             </div>
-        </div>
+
+            <!-- Sottotitolo -->
+            <div>
+                <label for="subtitle" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Sottotitolo della News</label>
+                <input type="text" name="subtitle" id="subtitle" value="{{ old('subtitle') }}"
+                       class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                       placeholder="Un breve riassunto...">
+                @error('subtitle') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Categoria -->
+            <div>
+                <label for="category_id" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Categoria della News</label>
+                <select name="category_id" id="category_id" required
+                        class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3">
+                    <option value="">Seleziona categoria...</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Immagine di Copertina -->
+            <div x-data="{ photoPreview: null }">
+                <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Immagine di Copertina (Max 2MB)</label>
+                <div class="flex items-center gap-4">
+                    <div class="w-32 h-20 bg-gray-50 rounded border-2 border-dashed border-gray-100 flex items-center justify-center overflow-hidden">
+                        <template x-if="photoPreview">
+                            <img :src="photoPreview" class="object-cover w-full h-full">
+                        </template>
+                        <template x-if="!photoPreview">
+                            <span class="text-gray-300 text-[10px]">NO IMG</span>
+                        </template>
+                    </div>
+                    <input type="file" name="image" id="image" class="hidden" x-ref="photo"
+                           @change="
+                                const reader = new FileReader();
+                                reader.onload = (e) => { photoPreview = e.target.result; };
+                                reader.readAsDataURL($refs.photo.files[0]);
+                           ">
+                    <button type="button" @click.prevent="$refs.photo.click()" 
+                            class="bg-gray-100 text-black px-4 py-2 rounded text-[10px] font-black uppercase hover:bg-gray-200">
+                        Seleziona File
+                    </button>
+                </div>
+                @error('image') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Contenuto -->
+            <div>
+                <label for="content" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Contenuto dell'articolo</label>
+                <textarea name="content" id="content" rows="8" required
+                          class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                          placeholder="Scrivi qui il corpo della news...">{{ old('content') }}</textarea>
+                @error('content') <p class="text-red-500 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Bottone Invia -->
+            <div class="pt-4 border-t flex justify-end">
+                <button type="submit" class="bg-black text-[#d9ff00] px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition">
+                    Pubblica News 🚀
+                </button>
+            </div>
+        </form>
+
     </div>
-</x-app-layout>
+</x-admin-layout>

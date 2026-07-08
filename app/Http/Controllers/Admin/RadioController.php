@@ -10,6 +10,25 @@ use Illuminate\Support\Facades\Storage;
 class RadioController extends Controller
 {
     /**
+     * MONITORAGGIO HARDWARE (Raspberry Pi)
+     */
+    public function getSystemStats()
+    {
+        // Temperatura
+        $temp = shell_exec('cat /sys/class/thermal/thermal_zone0/temp');
+        $tempCelsius = ($temp !== null) ? round($temp / 1000, 1) . '°C' : 'N/A';
+
+        // Carico (Load Average - 1 minuto)
+        $load = sys_getloadavg();
+        $loadPercentage = ($load !== false) ? round($load[0] * 10, 0) . '%' : 'N/A';
+
+        return response()->json([
+            'temp' => $tempCelsius,
+            'load' => $loadPercentage
+        ]);
+    }
+
+    /**
      * Dashboard Generale Admin
      */
     public function index()
@@ -86,15 +105,18 @@ class RadioController extends Controller
      */
     public function destroy(Track $track)
     {
-        // Rimuovo il file fisico se necessario prima di eliminare il record
-        // Storage::disk('public')->delete($track->file_path);
+        // 1. Cancellazione FISICA dei file (Audio e Cover)
+        if ($track->track_path) {
+            Storage::disk('public')->delete($track->track_path);
+        }
+        if ($track->cover_path) {
+            Storage::disk('public')->delete($track->cover_path);
+        }
         
+        // 2. Soft Delete del record
         $track->delete();
-        
-        // Aggiorno il JSON perché una traccia è sparita
-        $this->syncRaspberryPlaylist();
 
-        return back()->with('success', 'Traccia rimossa definitivamente dall\'archivio.');
+        return back()->with('success', 'Traccia eliminata e file rimossi dal disco.');
     }
 
     /**

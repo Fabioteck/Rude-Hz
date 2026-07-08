@@ -13,27 +13,36 @@ class NewsController extends Controller
     public function index()
     {
         $news = News::orderBy('created_at', 'desc')->paginate(15);
-        return view('admin.news.index', compact('news'));
+        $categories = \App\Models\NewsCategory::all();
+        return view('admin.news.index', compact('news', 'categories'));
     }
 
     public function create()
     {
-        return view('admin.news.create');
+        $categories = \App\Models\NewsCategory::all();
+        return view('admin.news.create', compact('categories'));
     }
 
     public function store(Request $request)
     {
-        // 1. Validazione (Le regole sono fondamentali per non far crashare Laravel)
-        $request->validate([]);
+        // 1. Validazione
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'category_id' => 'required|exists:news_categories,id',
+            'image' => 'required|image|max:2048', // Max 2MB
+            'content' => 'required',
+        ]);
 
         // 2. Creazione news
         $news = new News();
         $news->title = $request->title;
+        $news->subtitle = $request->subtitle;
+        $news->category_id = $request->category_id;
         $news->slug = Str::slug($request->title);
         $news->content = $request->content;
         $news->is_published = $request->has('is_published');
         
-        // 3. User ID obbligatorio (Evita l'errore SQL Integrity constraint violation)
         $news->user_id = auth()->id(); 
 
         // 4. Gestione Immagine

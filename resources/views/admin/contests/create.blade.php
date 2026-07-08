@@ -1,67 +1,71 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">Crea Nuovo Contest</h2>
-    </x-slot>
+<x-admin-layout>
+    <div class="max-w-4xl mx-auto px-4 py-8 w-full mt-6 bg-white rounded-lg shadow-sm">
+        
+        <h2 class="text-2xl font-black text-black uppercase tracking-tight italic mb-8">Crea Nuovo Contest</h2>
+        
+        <form action="{{ route('admin.contests.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
+            @csrf
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6 border border-gray-200">
-                
-                <form action="{{ route('admin.contests.store') }}" method="POST" enctype="multipart/form-data">
-                    @csrf
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div>
-                            <x-input-label for="title" value="Titolo del Contest" />
-                            <x-text-input id="title" name="title" type="text" class="mt-1 block w-full" :value="old('title')" required />
-                        </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div>
-                                <x-input-label for="max_tracks_per_artist" value="Max Tracce/Artista" />
-                                <x-text-input name="max_tracks_per_artist" type="number" :value="old('max_tracks_per_artist', 1)" class="mt-1 block w-full" />
-                            </div>
-                            <div>
-                                <x-input-label for="playlist_url" value="URL Playlist" />
-                                <x-text-input name="playlist_url" type="text" :value="old('playlist_url')" class="mt-1 block w-full" placeholder="https://..." />
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- DESCRIZIONE (Textarea standard per sicurezza) -->
-                    <div class="mb-6">
-                        <x-input-label for="description" value="Descrizione Contest" />
-                        <textarea id="description" name="description" rows="10" 
-                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" 
-                            required>{{ old('description') }}</textarea>
-                        <p class="text-xs text-gray-500 mt-1">Puoi usare tag HTML per la formattazione (es: &lt;b&gt;testo&lt;/b&gt;).</p>
-                    </div>
-
-                    <!-- LIBERATORIA -->
-                    <div class="mb-6">
-                        <x-input-label for="legal_disclaimer" value="Testo Liberatoria Legale" />
-                        <textarea name="legal_disclaimer" rows="4" 
-                            class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" 
-                            required>{{ old('legal_disclaimer') }}</textarea>
-                    </div>
-
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 bg-gray-50 rounded border border-gray-100">
-                        <div>
-                            <x-input-label value="Immagine (JPG/PNG)" />
-                            <input type="file" name="image" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        </div>
-                        <div>
-                            <x-input-label value="Regolamento PDF" />
-                            <input type="file" name="rules_pdf" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        </div>
-                    </div>
-
-                    <div class="mt-8 flex justify-end">
-                        <x-primary-button class="bg-gray-900 text-white px-6 py-2">
-                            PUBBLICA CONTEST
-                        </x-primary-button>
-                    </div>
-                </form>
+            <!-- BLOCCO ALTO: Titolo, Max, URL -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="md:col-span-1">
+                    <label for="title" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Titolo Contest</label>
+                    <input type="text" name="title" id="title" required value="{{ old('title') }}"
+                           class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                           placeholder="Titolo...">
+                </div>
+                <div>
+                    <label for="max_tracks_per_artist" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Max Tracce/Artista</label>
+                    <input type="number" name="max_tracks_per_artist" id="max_tracks_per_artist" required value="{{ old('max_tracks_per_artist', 1) }}"
+                           class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3">
+                </div>
+                <div>
+                    <label for="playlist_url" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">URL Playlist</label>
+                    <input type="text" name="playlist_url" id="playlist_url" value="{{ old('playlist_url') }}"
+                           class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                           placeholder="https://...">
+                </div>
             </div>
-        </div>
+
+            <!-- DESCRIZIONE -->
+            <div>
+                <label for="description" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Descrizione Contest</label>
+                <textarea name="description" id="description" rows="5" required
+                          class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                          placeholder="Dettagli del contest...">{{ old('description') }}</textarea>
+            </div>
+
+            <!-- LIBERATORIA -->
+            <div>
+                <label for="legal_disclaimer" class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Testo Liberatoria Legale</label>
+                <textarea name="legal_disclaimer" id="legal_disclaimer" rows="3" required
+                          class="w-full text-sm font-bold border-gray-100 rounded bg-gray-50 p-3"
+                          placeholder="Termini legali...">{{ old('legal_disclaimer') }}</textarea>
+            </div>
+
+            <!-- UPLOADS -->
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Immagine Copertina</label>
+                    <input type="file" name="image" required class="w-full text-xs font-bold border-gray-100 rounded bg-gray-50 p-2">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">Regolamento PDF</label>
+                    <input type="file" name="rules_pdf" required class="w-full text-xs font-bold border-gray-100 rounded bg-gray-50 p-2">
+                </div>
+            </div>
+
+            <!-- BOTTONE SALVA E CHECKBOX -->
+            <div class="pt-6 border-t flex justify-between items-center">
+                <div class="flex items-center">
+                    <input type="checkbox" name="is_active" id="is_active" value="1" checked class="rounded border-gray-300 text-black">
+                    <label for="is_active" class="ml-2 text-[10px] font-black text-gray-700 uppercase">Contest Attivo</label>
+                </div>
+                <button type="submit" class="bg-black text-[#d9ff00] px-8 py-3 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-gray-800 transition">
+                    PUBBLICA CONTEST
+                </button>
+            </div>
+        </form>
+
     </div>
-</x-app-layout>
+</x-admin-layout>

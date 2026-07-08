@@ -1,61 +1,52 @@
 <x-admin-layout>
-    <div class="max-w-7xl mx-auto py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <!-- Header con Titolo e Bottone Carica -->
+        <!-- Intestazione Pagina -->
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-normal text-gray-800">Gestione Tracce</h2>
-            <button class="bg-[#1e293b] text-white px-5 py-2 rounded shadow-sm text-[11px] font-bold uppercase tracking-widest hover:bg-black transition">
-                + NUOVA TRACCIA
-            </button>
+            <h2 class="text-2xl font-black text-black uppercase tracking-tight italic">Gestione Tracce Caricate</h2>
         </div>
 
-        <!-- Card Bianca Contenuti -->
-        <div class="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+        <!-- Tabella Bianca -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr class="text-[10px] font-bold text-gray-400 uppercase tracking-widest border-b border-gray-50">
-                        <th class="px-8 py-5">Immagine</th>
+                    <tr class="border-b border-gray-50 uppercase text-[9px] font-black text-gray-300 tracking-[0.2em]">
+                        <th class="px-8 py-5">Cover</th>
                         <th class="px-8 py-5">Titolo / Slug</th>
                         <th class="px-8 py-5">Artista</th>
                         <th class="px-8 py-5 text-center">Stato</th>
-                        <th class="px-8 py-5 text-right">Azioni</th>
+                        <th class="px-8 py-5 text-right">Console</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-50">
                     @foreach($tracks as $track)
-                    <tr class="hover:bg-gray-50 transition-colors">
+                    <tr class="hover:bg-gray-50 transition">
                         <td class="px-8 py-4">
-                            <div class="w-16 h-10 bg-gray-100 rounded overflow-hidden">
-                                <img src="{{ asset('storage/'.$track->cover_path) }}" class="w-full h-full object-cover" onerror="this.src='/img/placeholder.jpg'">
+                            <div class="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden">
+                                <img src="{{ $track->cover_path ? asset('storage/'.$track->cover_path) : asset('images/default-track.jpg') }}" 
+                                     class="w-full h-full object-cover"
+                                     onerror="this.onerror=null; this.src='data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22%23cbd5e0%22 stroke-width=%222%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22><path d=%22M9 18V5l12-2v13%22/><circle cx=%226%22 cy=%2218%22 r=%223%22/><circle cx=%2218%22 cy=%2216%22 r=%223%22/></svg>';">
                             </div>
                         </td>
                         <td class="px-8 py-4">
-                            <div class="text-sm font-bold text-gray-900">{{ $track->title }}</div>
-                            <div class="text-[10px] text-gray-400">{{ $track->slug }}</div>
+                            <div class="text-sm font-black text-black uppercase">{{ $track->title }}</div>
+                            <div class="text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{{ $track->slug }}</div>
                         </td>
-                        <td class="px-8 py-4 text-sm text-gray-600">
-                            {{ $track->artist->name ?? 'Indipendente' }}
+                        <td class="px-8 py-4">
+                            <div class="text-sm font-bold text-gray-900">{{ $track->artist->name ?? 'Indipendente' }}</div>
                         </td>
                         <td class="px-8 py-4 text-center">
-                            @if($track->is_approved)
-                                <span class="text-[10px] font-bold text-green-500 flex items-center justify-center uppercase">
-                                    <span class="w-2 h-2 bg-green-500 rounded-full mr-2"></span> ATTIVO
-                                </span>
-                            @else
-                                <span class="text-[10px] font-bold text-orange-400 flex items-center justify-center uppercase">
-                                    <span class="w-2 h-2 bg-orange-400 rounded-full mr-2"></span> PENDING
-                                </span>
-                            @endif
+                            <span class="text-[9px] font-black px-3 py-1 rounded-full uppercase tracking-tighter bg-gray-100 text-gray-600">CARICATA</span>
                         </td>
+                        <!-- Console Azioni -->
                         <td class="px-8 py-4 text-right">
-                            <div class="flex justify-end space-x-2 text-[11px] font-bold uppercase">
-                                <form action="{{ route('admin.radio.approve', $track) }}" method="POST">
-                                    @csrf @method('PATCH')
-                                    <button class="text-blue-500 hover:text-blue-700">Modifica</button>
-                                </form>
-                                <form action="{{ route('admin.radio.destroy', $track) }}" method="POST">
-                                    @csrf @method('DELETE')
-                                    <button class="text-red-500 hover:text-red-700">Elimina</button>
+                            <div class="flex justify-end items-center space-x-2">
+                                <form action="{{ route('admin.radio.destroy', $track) }}" method="POST" onsubmit="return confirm('Sei sicuro? Questa azione eliminerà definitivamente i file.');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="flex items-center text-[10px] font-black uppercase bg-red-100 text-red-600 px-3 py-1.5 rounded hover:bg-red-200 transition-colors">
+                                        Del 🗑️
+                                    </button>
                                 </form>
                             </div>
                         </td>

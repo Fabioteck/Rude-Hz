@@ -10,6 +10,12 @@ use Illuminate\Support\Str;
 
 class ArtistController extends Controller
 {
+    public function publicIndex()
+    {
+        $artists = Artist::latest()->get();
+        return view('artists', compact('artists'));
+    }
+
     public function show($slug)
     {
         $artist = Artist::where('slug', $slug)->firstOrFail();
@@ -19,6 +25,11 @@ class ArtistController extends Controller
 
     public function updateArtist(Request $request)
     {
+        $request->validate([
+            'photo' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Max 2MB
+            'profile_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048', // Max 2MB
+        ]);
+
         $artist = Artist::where('user_id', Auth::id())->firstOrFail();
 
         // 1. Salvataggio testi (Bio, Social, Style)

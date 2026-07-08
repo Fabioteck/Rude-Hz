@@ -27,6 +27,12 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
+        // Controllo amministratore
+        $admin = User::where('email', $request->email)->where('is_admin', true)->first();
+        if ($admin) {
+            return back()->withErrors(['email' => 'Questa email è registrata come amministratore e non può creare un profilo artista.']);
+        }
+
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,

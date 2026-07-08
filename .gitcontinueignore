@@ -1,0 +1,20 @@
+# Importa tutto quello che c'è nel gitignore standard
+node_modules/
+vendor/
+.git/
+
+# Blocca TUTTA la cartella storage (inclusi i log giganti di Laravel)
+storage/
+bootstrap/cache/
+
+# Blocca i file di blocco che contengono migliaia di righe di testo inutile per l'IA
+composer.lock
+package-lock.json
+
+# File di sistema e configurazioni
+.env
+.env.backup
+.env.production
+.vscode/
+.idea/
+*.log

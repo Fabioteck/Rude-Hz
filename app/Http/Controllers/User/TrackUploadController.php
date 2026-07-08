@@ -37,7 +37,7 @@ class TrackUploadController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'audio_file' => 'required|mimes:mp3,wav,ogg|max:51200', // 50MB
+            'audio_file' => 'required|mimes:mp3,wav|max:10240', // 10MB limit
             'genre' => 'required|string',
             'version' => 'nullable|string|max:100',
             'bpm' => 'nullable|integer',
@@ -111,14 +111,23 @@ class TrackUploadController extends Controller
             'bpm' => 'nullable|integer',
             'genre' => 'required|string',
             'version' => 'nullable|string|max:100',
+            'cover_image' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
         ]);
+
+        if ($request->hasFile('cover_image')) {
+            // Rimozione vecchia cover se esiste
+            if ($track->cover_path && Storage::disk('public')->exists($track->cover_path)) {
+                Storage::disk('public')->delete($track->cover_path);
+            }
+            $validated['cover_path'] = $request->file('cover_image')->store('tracks/covers', 'public');
+        }
+
+        // Escludiamo il campo file dal salvataggio diretto nel DB
+        unset($validated['cover_image']);
 
         $track->update($validated);
 
-        // Se aggiorni il titolo, potresti voler rigenerare lo slug, 
-        // ma per ora manteniamo quello esistente per non rompere i QR code già stampati.
-
-        return redirect()->route('user.tracks.index')->with('success', 'Metadati aggiornati con successo.');
+        return redirect()->route('user.tracks.index')->with('success', 'Traccia aggiornata con successo.');
     }
 
     /**

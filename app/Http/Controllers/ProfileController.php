@@ -65,13 +65,27 @@ class ProfileController extends Controller
 public function updateLiberatoria(Request $request) {
     $request->validate([
         'real_name' => 'required|string|max:255',
-        'tax_code' => 'required|string|max:16',
-        'accepted_terms' => 'accepted',
+        'tax_code' => [
+            'required', 
+            'string', 
+            'regex:/^[A-Z]{6}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{2}[A-Z]{1}[0-9LMNPQRSTUV]{3}[A-Z]{1}$/i'
+        ],
+        'accepted_terms' => 'required|accepted',
+    ], [
+        'tax_code.regex' => 'Il formato del Codice Fiscale non è valido.',
+        'accepted_terms.accepted' => 'Devi accettare i termini della liberatoria per procedere!',
+        'accepted_terms.required' => 'Devi accettare i termini della liberatoria per procedere!',
     ]);
 
-    auth()->user()->update($request->only('real_name', 'tax_code'));
+    // Aggiorna tramite la relazione artist()
+    $artist = $request->user()->artist()->firstOrCreate(['user_id' => $request->user()->id]);
+    $artist->update([
+        'real_name' => $request->real_name,
+        'tax_code' => strtoupper($request->tax_code),
+        'accepted_terms' => true,
+    ]);
 
-    return back()->with('status', 'Liberatoria aggiornata con successo!');
+    return redirect()->route('user.studio')->with('success', 'Liberatoria firmata con successo. Benvenuto nello Studio!');
 }
 
 }

@@ -10,9 +10,27 @@ use Illuminate\Support\Str;
 class Artist extends Model
 {
     /**
-     * Permette il mass-assignment su tutti i campi.
+     * Permette il mass-assignment solo ai campi specificati.
      */
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'name',
+        'bio',
+        'style',
+        'nostr_npub',
+        'ln_address',
+        'apple_music_url',
+        'spotify_url',
+        'soundcloud_url',
+        'instagram_url',
+        'youtube_url',
+        'facebook_url',
+        'profile_image',
+        'photo',
+        'real_name',
+        'tax_code',
+        'accepted_terms',
+    ];
 
     /**
      * Boot logic per la gestione dello slug.

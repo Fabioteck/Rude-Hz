@@ -15,8 +15,9 @@ class WelcomeController extends Controller
     {
         $artists = Artist::latest()->take(4)->get();
         $tracks = Track::with('artist')->latest()->take(5)->get();
+        $latestNews = \App\Models\News::latest()->first();
         
-        return view('welcome', compact('artists', 'tracks'));
+        return view('welcome', compact('artists', 'tracks', 'latestNews'));
     }
 
     /**
