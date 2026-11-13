@@ -61,6 +61,7 @@
                 <!-- User, Guide & Logout -->
                 <div class="flex items-center gap-3">
                     <x-admin-guide />
+                    <span class="border border-[#00FF66]/40 text-[#00FF66] px-2.5 py-1 rounded text-[10px] font-mono">{{ auth()->user()->email }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="bg-zinc-900 border border-red-500/30 hover:bg-red-600 text-red-400 hover:text-white font-mono font-bold uppercase text-[10px] tracking-wider px-3 py-1.5 rounded transition-colors">

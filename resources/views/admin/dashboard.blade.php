@@ -36,7 +36,7 @@
         <!-- Cards Statistiche -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
             @php 
-                $stats = [
+                $allStats = [
                     ['label' => 'Da Moderare', 'value' => \App\Models\Track::where('is_approved', 0)->count(), 'link' => route('admin.radio.archive'), 'color' => 'orange'],
                     ['label' => 'Artisti', 'value' => \App\Models\Artist::count(), 'link' => route('admin.artists.index'), 'color' => 'black'],
                     ['label' => 'Contest', 'value' => \App\Models\Contest::count(), 'link' => route('admin.contests.index'), 'color' => 'black'],
@@ -44,6 +44,15 @@
                     ['label' => 'News', 'value' => \App\Models\News::count(), 'link' => route('admin.news.index'), 'color' => 'black'],
                     ['label' => 'Playlists', 'value' => \App\Models\Playlist::count(), 'link' => '#', 'color' => 'black']
                 ];
+
+                $user = auth()->user();
+                if ($user && $user->isEditor()) {
+                    $stats = array_filter($allStats, fn($s) => in_array($s['label'], ['Contest', 'News']));
+                } elseif ($user && $user->isCurator()) {
+                    $stats = array_filter($allStats, fn($s) => in_array($s['label'], ['Da Moderare', 'Artisti', 'Tracce Tot.', 'Playlists']));
+                } else {
+                    $stats = $allStats;
+                }
             @endphp
 
             @foreach($stats as $stat)

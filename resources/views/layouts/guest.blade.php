@@ -38,12 +38,33 @@
 
             <!-- Footer con testo Bianco Splendente -->
             <div class="mt-12 flex flex-col items-center gap-4">
-                <div class="flex items-center gap-1.5 font-mono text-xs">
-                    <a href="{{ route('lang.switch', 'it') }}" class="{{ app()->getLocale() == 'it' ? 'text-[#d9ff00] font-bold underline' : 'text-zinc-500 hover:text-white' }}">IT</a>
-                    <span class="text-zinc-700">/</span>
-                    <a href="{{ route('lang.switch', 'en') }}" class="{{ app()->getLocale() == 'en' ? 'text-[#d9ff00] font-bold underline' : 'text-zinc-500 hover:text-white' }}">EN</a>
-                    <span class="text-zinc-700">/</span>
-                    <a href="{{ route('lang.switch', 'es') }}" class="{{ app()->getLocale() == 'es' ? 'text-[#d9ff00] font-bold underline' : 'text-zinc-500 hover:text-white' }}">ES</a>
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('lang.switch', 'it') }}" title="Italiano" class="transition transform hover:scale-110">
+                        <svg class="w-6 h-4 rounded-sm overflow-hidden border {{ app()->getLocale() == 'it' ? 'border-[#00FF66] shadow-[0_0_10px_rgba(0,255,102,0.8)]' : 'border-white/20 opacity-60 hover:opacity-100' }}" viewBox="0 0 3 2">
+                            <rect width="1" height="2" fill="#008C45"/>
+                            <rect x="1" width="1" height="2" fill="#F4F5F0"/>
+                            <rect x="2" width="1" height="2" fill="#CD212A"/>
+                        </svg>
+                    </a>
+                    <a href="{{ route('lang.switch', 'en') }}" title="English" class="transition transform hover:scale-110">
+                        <svg class="w-6 h-4 rounded-sm overflow-hidden border {{ app()->getLocale() == 'en' ? 'border-[#00FF66] shadow-[0_0_10px_rgba(0,255,102,0.8)]' : 'border-white/20 opacity-60 hover:opacity-100' }}" viewBox="0 0 60 30">
+                            <clipPath id="s-guest"><path d="M0,0 v30 h60 v-30 z"/></clipPath>
+                            <clipPath id="t-guest"><path d="M30,15 h30 v15 z v-15 h-30 z h-30 v-15 z v15 h30 z"/></clipPath>
+                            <g clip-path="url(#s-guest)">
+                                <path d="M0,0 v30 h60 v-30 z" fill="#012169"/>
+                                <path d="M0,0 L60,30 M60,0 L0,30" stroke="#fff" stroke-width="6"/>
+                                <path d="M0,0 L60,30 M60,0 L0,30" clip-path="url(#t-guest)" stroke="#C8102E" stroke-width="4"/>
+                                <path d="M30,0 v30 M0,15 h60" stroke="#fff" stroke-width="10"/>
+                                <path d="M30,0 v30 M0,15 h60" stroke="#C8102E" stroke-width="6"/>
+                            </g>
+                        </svg>
+                    </a>
+                    <a href="{{ route('lang.switch', 'es') }}" title="Español" class="transition transform hover:scale-110">
+                        <svg class="w-6 h-4 rounded-sm overflow-hidden border {{ app()->getLocale() == 'es' ? 'border-[#00FF66] shadow-[0_0_10px_rgba(0,255,102,0.8)]' : 'border-white/20 opacity-60 hover:opacity-100' }}" viewBox="0 0 750 500">
+                            <rect width="750" height="500" fill="#aa151b"/>
+                            <rect width="750" height="250" y="125" fill="#f1bf00"/>
+                        </svg>
+                    </a>
                 </div>
                 <div class="text-[10px] font-bold text-white uppercase tracking-[0.3em] opacity-100 text-center leading-loose">
                     &copy; {{ date('Y') }} RUDE-HZ COMMUNITY
