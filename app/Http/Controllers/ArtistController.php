@@ -12,15 +12,23 @@ class ArtistController extends Controller
 {
     public function publicIndex()
     {
-        $artists = Artist::latest()->get();
-        return view('artists', compact('artists'));
+        $artists = \App\Models\Artist::active()->orderBy('name', 'asc')->paginate(20);
+        // CORREZIONE PERCORSO: 'artist.index' invece di 'artists.index'
+        return view('artist.index', compact('artists'));
     }
 
+    /**
+     * Mostra il profilo del singolo artista con le sue tracce approvate.
+     */
     public function show($slug)
     {
-        $artist = Artist::where('slug', $slug)->firstOrFail();
-        $tracks = $artist->tracks()->where('is_approved', true)->get();
-        return view('artists.show', compact('artist', 'tracks'));
+        $artist = \App\Models\Artist::active()->where('slug', $slug)->firstOrFail();
+        
+        // Eager loading delle tracce approvate per l'artista selezionato
+        $tracks = $artist->tracks()->active()->where('is_approved', true)->latest()->get();
+
+        // CORREZIONE PERCORSO: 'artist.show' invece di 'artists.show'
+        return view('artist.show', compact('artist', 'tracks'));
     }
 
     public function updateArtist(Request $request)
@@ -43,8 +51,8 @@ class ArtistController extends Controller
             if ($artist->profile_image) {
                 Storage::disk('public')->delete($artist->profile_image);
             }
-            // Salvataggio fisico
-            $path = $request->file('profile_image')->store('artists/avatars', 'public');
+            // Salvataggio ottimizzato WebP
+            $path = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('profile_image'), 'artists/avatars', 400);
             $artist->profile_image = $path;
             $statusMessage .= "Avatar caricato! ";
         }
@@ -54,7 +62,7 @@ class ArtistController extends Controller
             if ($artist->photo) {
                 Storage::disk('public')->delete($artist->photo);
             }
-            $path = $request->file('photo')->store('artists/covers', 'public');
+            $path = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('photo'), 'artists/covers', 1200);
             $artist->photo = $path;
             $statusMessage .= "Cover caricata! ";
         }

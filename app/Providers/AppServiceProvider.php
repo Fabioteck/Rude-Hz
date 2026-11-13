@@ -44,5 +44,10 @@ class AppServiceProvider extends ServiceProvider
             }
             return null; 
         });
+
+        // 4. Gate per Dedoc Scramble API Documentation
+        Gate::define('viewApiDocs', function (?User $user) {
+            return app()->environment('local') || ($user && (bool) $user->is_admin);
+        });
     }
 }

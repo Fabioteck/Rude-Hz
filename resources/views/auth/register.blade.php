@@ -1,41 +1,59 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register') }}" class="space-y-6">
+    <form method="POST" action="{{ route('register') }}">
         @csrf
 
-        <!-- Name -->
+        <!-- 1. ARTISTA / NOME (Input con sfondo Nero, pronto per il testo) -->
         <div>
-            <label for="name" class="block font-black text-xs text-white uppercase tracking-[0.2em] mb-2">Artista / Nome</label>
-            <x-text-input id="name" class="block w-full" type="text" name="name" :value="old('name')" required autofocus />
+            <x-input-label for="name" :value="__('Artista / Nome')" />
+            <x-text-input id="name" 
+                          style="background-color: #000000 !important; color: #ffffff !important; border-color: #d2ff00 !important;"
+                          class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+            <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
-        <!-- Email Address -->
-        <div>
-            <label for="email" class="block font-black text-xs text-white uppercase tracking-[0.2em] mb-2">Email Privata</label>
-            <x-text-input id="email" class="block w-full" type="email" name="email" :value="old('email')" required />
+        <!-- 2. EMAIL PRIVATA (Sfondo Bianco forzato, pronto per il testo) -->
+        <div class="mt-4">
+            <x-input-label for="email" :value="__('Email Privata')" />
+            <x-text-input id="email" 
+                          style="background-color: #ffffff !important; color: #000000 !important;"
+                          class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
+            <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
-        <!-- Password Row -->
-        <div class="grid grid-cols-2 gap-4">
+        <!-- 3. PASSWORD & CONFERMA (Sfondi Bianchi forzati) -->
+        <div class="mt-4 grid grid-cols-2 gap-4">
             <div>
-                <label for="password" class="block font-black text-xs text-white uppercase tracking-[0.2em] mb-2">Password</label>
-                <x-text-input id="password" class="block w-full" type="password" name="password" required />
+                <x-input-label for="password" :value="__('messages.auth.password')" />
+                <x-text-input id="password" 
+                              style="background-color: #ffffff !important; color: #000000 !important;"
+                              class="block mt-1 w-full" type="password" name="password" required autocomplete="new-password" />
+                <x-input-error :messages="$errors->get('password')" class="mt-2" />
             </div>
+
             <div>
-                <label for="password_confirmation" class="block font-black text-xs text-white uppercase tracking-[0.2em] mb-2">Conferma</label>
-                <x-text-input id="password_confirmation" class="block w-full" type="password" name="password_confirmation" required />
+                <x-input-label for="password_confirmation" :value="__('messages.auth.confirm_password')" />
+                <x-text-input id="password_confirmation" 
+                              style="background-color: #ffffff !important; color: #000000 !important;"
+                              class="block mt-1 w-full" type="password" name="password_confirmation" required autocomplete="new-password" />
+                <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
             </div>
         </div>
 
-        <!-- Action Buttons: Gemelli ma Invertiti -->
-        <div class="flex flex-col gap-4 pt-6">
-            <!-- Bottone Primario -->
-            <button type="submit" class="w-full h-[60px] flex items-center justify-center bg-[#d9ff00] text-black font-black uppercase text-sm tracking-[0.2em] rounded-full hover:bg-white transition-all shadow-[0_0_20px_rgba(217,255,0,0.15)]">
-                {{ __('Create Account') }}
+        <!-- 4. BOTTONE CREATE ACCOUNT (Giallo Acido Originale - Invariato) -->
+        <div class="mt-8 mb-4">
+            <button type="submit" 
+                    style="background-color: #d2ff00 !important; color: #000000 !important;"
+                    class="w-full font-extrabold py-3 px-4 rounded uppercase tracking-wider block text-center transition-all duration-200 hover:opacity-90">
+                {{ __('messages.auth.register') }}
             </button>
+        </div>
 
-            <!-- Bottone Secondario (Invertito) -->
-            <a href="{{ route('login') }}" class="w-full h-[60px] flex items-center justify-center border-2 border-[#d9ff00] text-[#d9ff00] font-black uppercase text-sm tracking-[0.2em] rounded-full hover:bg-[#d9ff00] hover:text-black transition-all">
-                {{ __('Already Registered?') }}
+        <!-- 5. BOTTONE ALREADY REGISTERED? (Allineato con Login: Verde Acido, Testo Nero) -->
+        <div class="text-center">
+            <a href="{{ route('login') }}" 
+               style="background-color: #39ff14 !important; color: #000000 !important;"
+               class="w-full block font-extrabold py-3 px-4 rounded uppercase tracking-wider text-center transition-all duration-200 hover:opacity-90">
+                {{ __('messages.auth.already_registered') }}
             </a>
         </div>
     </form>

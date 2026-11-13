@@ -9,7 +9,7 @@ class PublicTrackController extends Controller
 {
     public function index()
     {
-        $tracks = Track::where('is_approved', true)->with('artist')->latest()->get();
+        $tracks = Track::active()->where('is_approved', true)->with('artist')->latest()->paginate(15);
         return view('tracks', compact('tracks'));
     }
 

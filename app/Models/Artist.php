@@ -15,6 +15,7 @@ class Artist extends Model
     protected $fillable = [
         'user_id',
         'name',
+        'slug',
         'bio',
         'style',
         'nostr_npub',
@@ -30,7 +31,18 @@ class Artist extends Model
         'real_name',
         'tax_code',
         'accepted_terms',
+        'is_active',
     ];
+
+    protected $casts = [
+        'is_active' => 'boolean',
+        'accepted_terms' => 'boolean',
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
 
     /**
      * Boot logic per la gestione dello slug.

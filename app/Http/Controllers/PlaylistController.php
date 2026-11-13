@@ -18,10 +18,10 @@ class PlaylistController extends Controller
             return $query;
         }])
         ->latest()
-        ->get();
+        ->paginate(12);
 
         // Fallback di sicurezza: se la colonna tracks_count non si popola, impostiamo 0 per evitare errori nel ciclo Blade
-        $playlists->transform(function ($playlist) {
+        $playlists->getCollection()->transform(function ($playlist) {
             if (!isset($playlist->tracks_count)) {
                 $playlist->tracks_count = 0;
             }

@@ -17,6 +17,18 @@ class Track extends Model
      */
     protected $guarded = [];
 
+    protected $casts = [
+        'is_active' => 'boolean',
+        'is_approved' => 'boolean',
+        'is_featured' => 'boolean',
+        'in_playlist' => 'boolean',
+    ];
+
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
     /**
      * Ottieni l'utente che ha caricato la traccia.
      */

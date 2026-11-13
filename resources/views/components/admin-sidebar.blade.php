@@ -53,6 +53,11 @@
                         Contest
                     </a>
                 </li>
+                <li>
+                    <a href="{{ route('admin.manuals.upload') }}" class="flex items-center gap-3 px-3 py-2 text-sm font-semibold text-gray-700 hover:bg-gray-100 hover:text-black rounded-md">
+                        📄 Upload Manuali PDF
+                    </a>
+                </li>
             </ul>
         </div>
 

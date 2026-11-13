@@ -12,8 +12,8 @@ class NewsController extends Controller
      */
     public function index()
     {
-        // Prendiamo le news più recenti, paginate per non appesantire il RPi
-        $news = News::latest()->paginate(10);
+        // Prendiamo le news più recenti pubblicate, paginate per non appesantire il RPi
+        $news = News::where('is_published', true)->latest()->paginate(10);
         
         return view('news.index', compact('news'));
     }
@@ -23,11 +23,12 @@ class NewsController extends Controller
      */
     public function show($slug)
     {
-        // Cerchiamo la news per slug, se non esiste 404
-        $news = News::where('slug', $slug)->firstOrFail();
+        // Cerchiamo la news pubblicata per slug, se non esiste 404
+        $news = News::where('slug', $slug)->where('is_published', true)->firstOrFail();
 
-        // Prendiamo altre news correlate (le ultime 3 escludendo quella corrente)
+        // Prendiamo altre news correlate pubblicate (le ultime 3 escludendo quella corrente)
         $relatedNews = News::where('id', '!=', $news->id)
+                           ->where('is_published', true)
                            ->latest()
                            ->take(3)
                            ->get();

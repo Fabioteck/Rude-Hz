@@ -37,7 +37,7 @@ class TrackUploadController extends Controller
     {
         $request->validate([
             'title' => 'required|string|max:255',
-            'audio_file' => 'required|mimes:mp3,wav|max:10240', // 10MB limit
+            'audio_file' => 'required|mimes:mp3,wav|max:20480', // 20MB limit
             'genre' => 'required|string',
             'version' => 'nullable|string|max:100',
             'bpm' => 'nullable|integer',
@@ -119,7 +119,7 @@ class TrackUploadController extends Controller
             if ($track->cover_path && Storage::disk('public')->exists($track->cover_path)) {
                 Storage::disk('public')->delete($track->cover_path);
             }
-            $validated['cover_path'] = $request->file('cover_image')->store('tracks/covers', 'public');
+            $validated['cover_path'] = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('cover_image'), 'tracks/covers', 800);
         }
 
         // Escludiamo il campo file dal salvataggio diretto nel DB

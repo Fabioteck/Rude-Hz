@@ -1,85 +1,93 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Nuovo Artista Rude-Hz') }}
-        </h2>
-    </x-slot>
-
-    <div class="py-12">
-        <div class="max-w-4xl mx-auto sm:px-6 lg:px-8">
-            <form action="{{ route('admin.artists.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6">
-                @csrf
-
-                <!-- SEZIONE 1: IDENTITA' -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 class="text-lg font-bold mb-4 border-b pb-2 text-indigo-600">Identità Artistica</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700">Nome Artista *</label>
-                            <input type="text" name="name" required class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700">Genere Musicale</label>
-                            <input type="text" name="genre" placeholder="es. Techno, Experimental..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-bold text-gray-700">Biografia</label>
-                            <textarea name="bio" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-                        </div>
-                        <div class="md:col-span-2">
-                            <label class="block text-sm font-bold text-gray-700">Foto Artista</label>
-                            <input type="file" name="photo" class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SEZIONE 2: WEB & SOCIAL -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border">
-                    <h3 class="text-lg font-bold mb-4 border-b pb-2 text-indigo-600">Presenza Web</h3>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 italic">SoundCloud URL</label>
-                            <input type="url" name="soundcloud_url" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 italic">Instagram URL</label>
-                            <input type="url" name="instagram_url" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 italic">YouTube URL</label>
-                            <input type="url" name="youtube_url" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700 italic">Facebook URL</label>
-                            <input type="url" name="facebook_url" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                        </div>
-                    </div>
-                </div>
-
-                <!-- SEZIONE 3: SATOSHI & NOSTR (PROTOCOL) -->
-                <div class="bg-white p-6 rounded-lg shadow-sm border-2 border-indigo-100">
-                    <h3 class="text-lg font-bold mb-4 border-b pb-2 text-orange-500 flex items-center">
-                        <span class="mr-2">⚡</span> Protocolli & Mance
-                    </h3>
-                    <div class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700">Nostr Public Key (npub...)</label>
-                            <input type="text" name="npub" placeholder="npub1..." class="mt-1 block w-full border-gray-300 rounded-md shadow-sm font-mono text-xs">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-bold text-gray-700">Lightning Address (LNURL)</label>
-                            <input type="text" name="lightning_address" placeholder="utente@getalby.com" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm font-mono text-xs text-orange-600">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="flex justify-end gap-4">
-                    <a href="{{ route('admin.artists.index') }}" class="px-6 py-2 border rounded-md text-gray-600 font-bold hover:bg-gray-50">Annulla</a>
-                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-md font-black shadow-lg hover:bg-indigo-700 transition uppercase">
-                        Salva Artista su Rude-Hz
-                    </button>
-                </div>
-            </form>
+<x-admin-layout>
+    <div class="max-w-4xl mx-auto px-4 py-12 w-full mt-6 bg-zinc-950 text-white rounded-md border border-white/10 shadow-2xl relative overflow-hidden font-mono">
+        
+        <div class="mb-8 border-b border-white/10 pb-6 flex justify-between items-center">
+            <div>
+                <h2 class="text-3xl font-black uppercase italic tracking-tight text-white">Nuovo Artista</h2>
+                <p class="text-[10px] font-mono text-[#E6FF00] uppercase tracking-widest mt-1">[Admin Panel] Registrazione Artista & Tech Stack</p>
+            </div>
+            <a href="{{ route('admin.artists.index') }}" class="text-xs font-mono text-zinc-400 hover:text-[#E6FF00] uppercase transition">← Torna alla lista</a>
         </div>
+
+        <form action="{{ route('admin.artists.store') }}" method="POST" enctype="multipart/form-data" class="space-y-6 text-xs">
+            @csrf
+
+            <!-- Identità -->
+            <div>
+                <label for="name" class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Nome Artista *</label>
+                <input type="text" name="name" id="name" required value="{{ old('name') }}"
+                       class="w-full text-sm font-bold border border-zinc-800 rounded-md bg-zinc-900/60 text-white p-3 focus:border-[#E6FF00] focus:ring-1 focus:ring-[#E6FF00] outline-none uppercase">
+                @error('name') <p class="text-red-400 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Stile / Genere -->
+            <div>
+                <label for="style" class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Stile / Genere</label>
+                <input type="text" name="style" id="style" value="{{ old('style') }}" placeholder="es. Techno, Ambient, Experimental..."
+                       class="w-full text-sm font-bold border border-zinc-800 rounded-md bg-zinc-900/60 text-white p-3 focus:border-[#E6FF00] focus:ring-1 focus:ring-[#E6FF00] outline-none">
+                @error('style') <p class="text-red-400 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Biografia -->
+            <div>
+                <label for="bio" class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Biografia</label>
+                <textarea name="bio" id="bio" rows="4"
+                          class="w-full text-sm font-bold border border-zinc-800 rounded-md bg-zinc-900/60 text-white p-3 focus:border-[#E6FF00] focus:ring-1 focus:ring-[#E6FF00] outline-none">{{ old('bio') }}</textarea>
+                @error('bio') <p class="text-red-400 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Foto / Avatar -->
+            <div>
+                <label class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-2">Foto / Cover Profilo</label>
+                <input type="file" name="photo" class="w-full text-xs text-zinc-400 border border-zinc-800 rounded-md bg-zinc-900/60 p-3">
+                @error('photo') <p class="text-red-400 text-[10px] mt-1">{{ $message }}</p> @enderror
+            </div>
+
+            <!-- Protocolli Satoshi & Nostr -->
+            <div class="bg-zinc-900/40 border border-zinc-800 p-6 rounded-md space-y-4">
+                <h3 class="text-sm font-black text-[#E6FF00] uppercase tracking-widest">⚡ Protocolli & Mance (Lightning / Nostr)</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Lightning Address (LNURL)</label>
+                        <input type="text" name="ln_address" value="{{ old('ln_address') }}" placeholder="user@getalby.com"
+                               class="w-full text-xs font-mono border border-zinc-800 rounded-md bg-zinc-900/60 text-white p-2.5 focus:border-[#E6FF00] outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">Nostr Public Key (npub)</label>
+                        <input type="text" name="nostr_npub" value="{{ old('nostr_npub') }}" placeholder="npub1..."
+                               class="w-full text-xs font-mono border border-zinc-800 rounded-md bg-zinc-900/60 text-white p-2.5 focus:border-[#E6FF00] outline-none">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                @foreach(['spotify', 'soundcloud', 'instagram', 'youtube', 'facebook'] as $social)
+                    @php $field = $social . '_url'; @endphp
+                    <div>
+                        <label class="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest mb-1">{{ ucfirst($social) }} URL</label>
+                        <input type="url" name="{{ $field }}" value="{{ old($field) }}" placeholder="https://..."
+                               class="w-full text-xs font-mono border border-zinc-800 rounded-md bg-zinc-900/60 text-white p-2.5 focus:border-[#E6FF00] outline-none">
+                    </div>
+                @endforeach
+            </div>
+
+            <!-- Stato Attivo -->
+            <div class="flex items-center bg-zinc-900/40 border border-zinc-800 p-4 rounded-md">
+                <input type="checkbox" name="is_active" id="is_active" value="1" checked
+                       class="h-4 w-4 text-[#E6FF00] focus:ring-[#E6FF00] border-zinc-700 rounded bg-zinc-900">
+                <label for="is_active" class="ml-3 block text-xs text-white font-bold uppercase">
+                    Profilo Attivo (Visibile sul portale)
+                </label>
+            </div>
+
+            <!-- Bottoni Azione -->
+            <div class="pt-6 border-t border-white/10 flex justify-end gap-4">
+                <a href="{{ route('admin.artists.index') }}" class="px-6 py-3 bg-zinc-900 border border-zinc-700 text-zinc-300 rounded-md text-xs font-bold uppercase hover:bg-zinc-800 transition">Annulla</a>
+                <button type="submit" class="bg-[#E6FF00] text-black px-8 py-3 rounded-md text-xs font-black uppercase tracking-widest hover:bg-white transition shadow-[0_0_20px_rgba(230,255,0,0.2)]">
+                    + Crea Artista
+                </button>
+            </div>
+        </form>
     </div>
-</x-app-layout>
+</x-admin-layout>

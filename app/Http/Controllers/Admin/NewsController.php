@@ -10,11 +10,20 @@ use Illuminate\Support\Str;
 
 class NewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $news = News::orderBy('created_at', 'desc')->paginate(15);
+        $search = $request->input('search');
+        $news = News::with('category')
+            ->when($search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                      ->orWhere('subtitle', 'like', "%{$search}%");
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10)
+            ->withQueryString();
+
         $categories = \App\Models\NewsCategory::all();
-        return view('admin.news.index', compact('news', 'categories'));
+        return view('admin.news.index', compact('news', 'categories', 'search'));
     }
 
     public function create()
@@ -42,12 +51,11 @@ class NewsController extends Controller
         $news->slug = Str::slug($request->title);
         $news->content = $request->content;
         $news->is_published = $request->has('is_published');
-        
         $news->user_id = auth()->id(); 
 
-        // 4. Gestione Immagine
+        // 3. Gestione Immagine
         if ($request->hasFile('image')) {
-            $news->image_path = $request->file('image')->store('news', 'public');
+            $news->image_path = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('image'), 'news', 1200);
         }
 
         $news->save();
@@ -57,15 +65,24 @@ class NewsController extends Controller
 
     public function edit(News $news)
     {
-        return view('admin.news.edit', compact('news'));
+        $categories = \App\Models\NewsCategory::all();
+        return view('admin.news.edit', compact('news', 'categories'));
     }
 
     public function update(Request $request, News $news)
     {
-        // Validazione anche per l'aggiornamento
-        $request->validate([]);
+        // Validazione per l'aggiornamento
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'subtitle' => 'nullable|string|max:255',
+            'category_id' => 'required|exists:news_categories,id',
+            'image' => 'nullable|image|max:2048',
+            'content' => 'required',
+        ]);
 
         $news->title = $request->title;
+        $news->subtitle = $request->subtitle;
+        $news->category_id = $request->category_id;
         $news->slug = Str::slug($request->title);
         $news->content = $request->content;
         $news->is_published = $request->has('is_published');
@@ -74,7 +91,7 @@ class NewsController extends Controller
             if ($news->image_path) {
                 Storage::disk('public')->delete($news->image_path);
             }
-            $news->image_path = $request->file('image')->store('news', 'public');
+            $news->image_path = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('image'), 'news', 1200);
         }
 
         $news->save();

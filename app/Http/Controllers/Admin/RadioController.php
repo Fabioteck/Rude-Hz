@@ -41,10 +41,30 @@ class RadioController extends Controller
      * ARCHIVIO UNIFICATO (Moderazione + Gestione Generale)
      * Carica tutte le tracce indipendentemente dallo stato.
      */
-    public function archive()
+    public function archive(Request $request)
     {
-        $tracks = Track::with('artist')->latest()->get();
-        return view('admin.radio.archive', compact('tracks'));
+        $search = $request->input('search');
+        $tracks = Track::with('artist')
+            ->when($search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%")
+                      ->orWhereHas('artist', fn($q) => $q->where('name', 'like', "%{$search}%"));
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.radio.archive', compact('tracks', 'search'));
+    }
+
+    public function toggleActive(Track $track)
+    {
+        $track->is_active = !$track->is_active;
+        $track->save();
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $track->is_active
+        ]);
     }
 
     /**

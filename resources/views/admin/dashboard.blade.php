@@ -1,34 +1,34 @@
 <x-admin-layout>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-white">
         
         <!-- Header -->
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-6">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 border-b border-white/10 pb-6 gap-6">
             <div>
-                <h2 class="text-3xl font-black text-black uppercase tracking-tighter italic">Amministrazione</h2>
-                <p class="text-xs font-bold text-gray-400 uppercase tracking-widest mt-1">Dashboard Generale</p>
+                <h2 class="text-3xl font-black uppercase italic tracking-tighter text-white">Amministrazione</h2>
+                <p class="text-[10px] font-mono text-[#d9ff00] uppercase tracking-widest mt-1">Dashboard Generale & Monitoraggio RPi 4</p>
             </div>
             
             <!-- Monitoraggio Sistema -->
-            <div class="flex items-center gap-6 bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+            <div class="flex items-center gap-6 bg-zinc-950 border border-white/10 p-4 rounded-md backdrop-blur-md font-mono text-xs">
                 <div class="flex items-center gap-2">
-                    <span class="text-xs font-bold text-gray-800">OS:</span>
-                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                    <span class="text-xs font-bold text-zinc-400">OS:</span>
+                    <span class="w-2 h-2 bg-[#d9ff00] rounded-full animate-pulse"></span>
                 </div>
                 
                 <div class="flex items-center gap-2">
                     <div class="relative w-10 h-10">
-                        <svg class="w-full h-full" viewBox="0 0 36 36"><path class="text-gray-200" fill="none" stroke-width="3" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="cpu-temp-circle" class="text-green-500" fill="none" stroke-width="3" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
-                        <span class="absolute inset-0 flex items-center justify-center text-[8px] font-black" id="cpu-temp">--</span>
+                        <svg class="w-full h-full" viewBox="0 0 36 36"><path class="text-zinc-800" fill="none" stroke-width="3" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="cpu-temp-circle" class="text-[#d9ff00]" fill="none" stroke-width="3" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+                        <span class="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white" id="cpu-temp">--</span>
                     </div>
-                    <span class="text-[9px] font-bold text-gray-400 uppercase">Temp</span>
+                    <span class="text-[9px] font-bold text-zinc-400 uppercase">Temp</span>
                 </div>
 
                 <div class="flex items-center gap-2">
                     <div class="relative w-10 h-10">
-                        <svg class="w-full h-full" viewBox="0 0 36 36"><path class="text-gray-200" fill="none" stroke-width="3" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="cpu-load-circle" class="text-blue-500" fill="none" stroke-width="3" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
-                        <span class="absolute inset-0 flex items-center justify-center text-[8px] font-black" id="cpu-load">--</span>
+                        <svg class="w-full h-full" viewBox="0 0 36 36"><path class="text-zinc-800" fill="none" stroke-width="3" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/><path id="cpu-load-circle" class="text-[#d9ff00]" fill="none" stroke-width="3" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/></svg>
+                        <span class="absolute inset-0 flex items-center justify-center text-[9px] font-black text-white" id="cpu-load">--</span>
                     </div>
-                    <span class="text-[9px] font-bold text-gray-400 uppercase">Load</span>
+                    <span class="text-[9px] font-bold text-zinc-400 uppercase">Load</span>
                 </div>
             </div>
         </div>
@@ -47,12 +47,12 @@
             @endphp
 
             @foreach($stats as $stat)
-            <div class="bg-white border border-gray-100 rounded-xl p-4 shadow-sm hover:shadow-md transition">
-                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">{{ $stat['label'] }}</p>
+            <div class="bg-zinc-950 border border-white/10 rounded-md p-5 shadow-xl hover:border-[#d9ff00]/50 transition backdrop-blur-md">
+                <p class="text-[9px] font-mono font-bold text-zinc-400 uppercase tracking-widest mb-2">{{ $stat['label'] }}</p>
                 <div class="flex justify-between items-end">
-                    <h3 class="text-3xl font-black text-black leading-none">{{ $stat['value'] }}</h3>
+                    <h3 class="text-3xl font-black text-white font-mono leading-none">{{ $stat['value'] }}</h3>
                     @if($stat['link'] !== '#')
-                        <a href="{{ $stat['link'] }}" class="text-[8px] font-black uppercase tracking-widest text-gray-300 hover:text-black">→</a>
+                        <a href="{{ $stat['link'] }}" class="text-xs font-mono font-bold text-[#d9ff00] hover:text-white transition">→</a>
                     @endif
                 </div>
             </div>
@@ -74,7 +74,7 @@
                     document.getElementById('cpu-load').textContent = data.load;
                     document.getElementById('cpu-load-circle').setAttribute('stroke-dasharray', `${load}, 100`);
                 })
-                .catch(err => console.error('Error:', err));
+                .catch(err => console.log('Stats bypass:', err));
         }
         setInterval(fetchStats, 5000);
         fetchStats();

@@ -10,11 +10,19 @@ use Illuminate\Support\Facades\Storage;
 
 class ContestController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        $search = $request->input('search');
         // Recupera i contest con il conteggio delle tracce per la tabella
-        $contests = Contest::withCount('tracks')->latest()->paginate(10);
-        return view('admin.contests.index', compact('contests'));
+        $contests = Contest::withCount('tracks')
+            ->when($search, function($query, $search) {
+                $query->where('title', 'like', "%{$search}%");
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.contests.index', compact('contests', 'search'));
     }
 
     public function create()
@@ -46,7 +54,7 @@ class ContestController extends Controller
 
         // Gestione Immagine
         if ($request->hasFile('image')) {
-            $contest->image_path = $request->file('image')->store('contests/images', 'public');
+            $contest->image_path = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('image'), 'contests/images', 1200);
         }
 
         // Gestione PDF
@@ -88,7 +96,7 @@ class ContestController extends Controller
             if ($contest->image_path) {
                 Storage::disk('public')->delete($contest->image_path);
             }
-            $contest->image_path = $request->file('image')->store('contests/images', 'public');
+            $contest->image_path = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('image'), 'contests/images', 1200);
         }
 
         // Aggiornamento PDF (elimina il vecchio se presente)

@@ -11,17 +11,22 @@ class UserSeeder extends Seeder
     public function run(): void
     {
         // Tuo Profilo Admin
-        User::create([
-            'name' => 'Fabio Admin',
-            'email' => 'frigeriwki@gmail.com',
-            'password' => Hash::make('techno'), // Metti la password che preferisci
-        ]);
+        User::firstOrCreate(
+            ['email' => 'frigeriwki@gmail.com'],
+            [
+                'name' => 'Fabio Admin',
+                'password' => Hash::make('techno'),
+                'is_admin' => true,
+            ]
+        );
 
         // Profilo Artista di Test (se vuoi un secondo account)
-        User::create([
-            'name' => 'Fabio Artist',
-            'email' => 'artist@rude-hz.it',
-            'password' => Hash::make('techno'),
-        ]);
+        User::firstOrCreate(
+            ['email' => 'artist@rude-hz.it'],
+            [
+                'name' => 'Fabio Artist',
+                'password' => Hash::make('techno'),
+            ]
+        );
     }
 }

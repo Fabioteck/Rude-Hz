@@ -18,7 +18,7 @@
                     
                     <!-- Left: Logo -->
                     <div class="text-[#d9ff00] font-black uppercase tracking-[0.2em] text-xs md:text-base">
-                        RUDE-HZ {{ Auth::user()->name }} | MY STUDIO
+                        Rude-Hz {{ Auth::user()->name }} | STUDIO
                     </div>
                     
                     <!-- Right: Hamburger -->
@@ -34,10 +34,10 @@
             <!-- Dropdown Menu (Optimized for Mobile) -->
             <div :class="{'block': open, 'hidden': ! open}" class="hidden fixed top-16 right-0 w-3/4 max-w-xs h-[calc(100vh-4rem)] bg-[#0a0a0a] z-[99] border-l border-gray-800 shadow-2xl">
                 <div class="pt-8 space-y-2">
-                    <a href="{{ route('user.studio') }}" class="block py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em] text-right">MY STUDIO</a>
-                    <a href="{{ route('user.tracks.index') }}" class="block py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em] text-right">TRACCE</a>
-                    <a href="{{ route('profile.liberatoria') }}" class="block py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em] text-right">LIBERATORIA</a>
-                    <form method="POST" action="{{ route('logout') }}">
+                    <a href="{{ route('user.studio') }}" class="block py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em] text-right">Artist</a>
+                    <a href="{{ route('user.tracks.index') }}" class="block py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em] text-right">Tracks</a>
+                    <!-- <a href="{{ route('profile.liberatoria') }}" class="block py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em] text-right">LIBERATORIA</a>
+                     --><form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <button type="submit" class="block w-full text-right py-4 px-6 text-white hover:text-[#d9ff00] uppercase font-black text-sm tracking-[0.1em]">
                             LOGOUT

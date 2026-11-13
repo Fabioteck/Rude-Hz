@@ -13,8 +13,8 @@ class WelcomeController extends Controller
      */
     public function index()
     {
-        $artists = Artist::latest()->take(4)->get();
-        $tracks = Track::with('artist')->latest()->take(5)->get();
+        $artists = Artist::active()->latest()->take(4)->get();
+        $tracks = Track::active()->with('artist')->latest()->take(5)->get();
         $latestNews = \App\Models\News::latest()->first();
         
         return view('welcome', compact('artists', 'tracks', 'latestNews'));
@@ -27,7 +27,7 @@ class WelcomeController extends Controller
     {
         // Recuperiamo la traccia tramite lo slug caricando anche i dati dell'artista
         // Usiamo firstOrFail così se lo slug è sbagliato spara una 404 automatica
-        $track = Track::where('slug', $slug)->with('artist')->firstOrFail();
+        $track = Track::active()->where('slug', $slug)->with('artist')->firstOrFail();
 
         // Mappato sulla tua struttura: resources/views/user/tracks/show.blade.php
         return view('user.tracks.show', compact('track'));

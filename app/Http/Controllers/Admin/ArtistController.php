@@ -11,10 +11,29 @@ use Illuminate\Support\Str;
 
 class ArtistController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $artists = Artist::orderBy('name', 'asc')->paginate(20);
-        return view('admin.artists.index', compact('artists'));
+        $search = $request->input('search');
+        $artists = Artist::when($search, function($query, $search) {
+                $query->where('name', 'like', "%{$search}%")
+                      ->orWhere('style', 'like', "%{$search}%");
+            })
+            ->orderBy('name', 'asc')
+            ->paginate(10)
+            ->withQueryString();
+
+        return view('admin.artists.index', compact('artists', 'search'));
+    }
+
+    public function toggleActive(Artist $artist)
+    {
+        $artist->is_active = !$artist->is_active;
+        $artist->save();
+
+        return response()->json([
+            'success' => true,
+            'is_active' => $artist->is_active
+        ]);
     }
 
     public function create()
@@ -73,17 +92,18 @@ class ArtistController extends Controller
         $artist->instagram_url = $request->instagram_url;
         $artist->youtube_url = $request->youtube_url;
         $artist->facebook_url = $request->facebook_url;
+        $artist->is_active = $request->has('is_active');
 
         // Gestione Profile Image
         if ($request->hasFile('profile_image')) {
             if ($artist->profile_image) Storage::disk('public')->delete($artist->profile_image);
-            $artist->profile_image = $request->file('profile_image')->store('artists/avatars', 'public');
+            $artist->profile_image = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('profile_image'), 'artists/avatars', 400);
         }
 
         // Gestione Photo/Cover
         if ($request->hasFile('photo')) {
             if ($artist->photo) Storage::disk('public')->delete($artist->photo);
-            $artist->photo = $request->file('photo')->store('artists/covers', 'public');
+            $artist->photo = \App\Services\ImageOptimizerService::optimizeAndStore($request->file('photo'), 'artists/covers', 1200);
         }
     }
 
@@ -91,8 +111,22 @@ class ArtistController extends Controller
     {
         if ($artist->profile_image) Storage::disk('public')->delete($artist->profile_image);
         if ($artist->photo) Storage::disk('public')->delete($artist->photo);
+
+        foreach ($artist->tracks as $track) {
+            if ($track->file_path) Storage::disk('public')->delete($track->file_path);
+            if ($track->cover_path) Storage::disk('public')->delete($track->cover_path);
+            $track->delete();
+        }
+
+        if ($artist->user) {
+            $artist->user->update([
+                'role' => 'listener',
+                'is_admin' => false,
+            ]);
+        }
+
         $artist->delete();
         
-        return redirect()->route('admin.artists.index')->with('warning', 'Artista rimosso.');
+        return redirect()->route('admin.artists.index')->with('success', 'Artista e relative tracce eliminati. Account mantenuto come ascoltatore.');
     }
 }

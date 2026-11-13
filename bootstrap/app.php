@@ -14,12 +14,14 @@ return Application::configure(basePath: dirname(__DIR__))
         // Tracciamento analitico agganciato globalmente al gruppo web
         $middleware->web(append: [
             \App\Http\Middleware\TrackPageViews::class,
+            \App\Http\Middleware\SetLocale::class,
         ]);
         
         // Conservazione completa dei tuoi alias esistenti
         $middleware->alias([
             'liberatoria' => \App\Http\Middleware\CheckLiberatoria::class,
             'is_admin' => \App\Http\Middleware\IsAdmin::class,
+            'plan' => \App\Http\Middleware\EnsurePlan::class,
         ]);
         
         // Gestione dei reindirizzamenti degli utenti e dei guest
@@ -27,6 +29,12 @@ return Application::configure(basePath: dirname(__DIR__))
             guests: '/login',
             users: '/dashboard' // Forza il passaggio dalla rotta bivio in web.php
         );
+
+        $middleware->validateCsrfTokens(except: [
+            'api/analytics/*',
+        ]);
+
+        
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
