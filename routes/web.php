@@ -55,8 +55,14 @@ Route::get('/playlists', [PlaylistController::class, 'index'])->name('playlists.
 Route::get('/playlist', function () { return redirect()->route('playlists.index', [], 301); });
 Route::get('/playlists/{slug}', [PlaylistController::class, 'show'])->name('playlists.show');
 
-Route::get('/project', function () { return view('project'); })->name('project');
-Route::get('/support', function () { return view('support'); })->name('support');
+Route::get('/project', function () {
+    $page = \App\Models\StaticPage::where('slug', 'project')->first();
+    return view('project', compact('page'));
+})->name('project');
+Route::get('/support', function () {
+    $page = \App\Models\StaticPage::where('slug', 'support')->first();
+    return view('support', compact('page'));
+})->name('support');
 Route::get('/manifest.json', function () {
     return response()->json(json_decode(file_get_contents(public_path('manifest.json')), true));
 });
@@ -159,6 +165,7 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('news-categories', NewsCategoryController::class)->only(['store', 'destroy']);
         Route::resource('playlists', AdminPlaylistController::class);
         Route::resource('contests', AdminContestController::class);
+        Route::resource('pages', \App\Http\Controllers\Admin\StaticPageController::class)->only(['index', 'edit', 'update']);
         Route::patch('/artists/{artist}/toggle-active', [AdminArtistController::class, 'toggleActive'])->name('artists.toggle-active');
         Route::resource('artists', AdminArtistController::class)->parameters(['artists' => 'artist']);
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);

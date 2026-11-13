@@ -31,6 +31,7 @@
                                 ['route' => 'admin.dashboard', 'label' => 'Dashboard'],
                                 ['route' => 'admin.contests.index', 'label' => 'Contest', 'match' => 'admin/contests*'],
                                 ['route' => 'admin.news.index', 'label' => 'News', 'match' => 'admin/news*'],
+                                ['route' => 'admin.pages.index', 'label' => 'PAGES', 'match' => 'admin/pages*'],
                             ];
                         } else {
                             $links = [
@@ -40,10 +41,11 @@
                                 ['route' => 'admin.playlists.index', 'label' => 'Playlist', 'match' => 'admin/playlists*'],
                                 ['route' => 'admin.contests.index', 'label' => 'Contest', 'match' => 'admin/contests*'],
                                 ['route' => 'admin.news.index', 'label' => 'News', 'match' => 'admin/news*'],
-                                ['route' => 'admin.stats.index', 'label' => 'Statistiche', 'match' => 'admin/stats*'],
+                                ['route' => 'admin.pages.index', 'label' => 'PAGES', 'match' => 'admin/pages*'],
+                                ['route' => 'admin.stats.index', 'label' => 'STATS', 'match' => 'admin/stats*'],
                             ];
                             if ($user && $user->role === 'super_admin') {
-                                $links[] = ['route' => 'admin.users.index', 'label' => 'Utenti', 'match' => 'admin/users*'];
+                                $links[] = ['route' => 'admin.users.index', 'label' => 'USERS', 'match' => 'admin/users*'];
                             }
                         }
                     @endphp

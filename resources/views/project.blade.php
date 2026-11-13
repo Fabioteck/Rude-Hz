@@ -14,10 +14,10 @@
         <div class="mb-12 border-b border-white/10 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
             <div>
                 <h1 class="text-5xl md:text-7xl font-black uppercase italic tracking-tighter text-white">
-                    Project
+                    {{ $page->title ?? 'Project' }}
                 </h1>
                 <p class="text-[#d9ff00] uppercase tracking-widest text-xs mt-3 font-bold font-mono italic">
-                    [06] Il manifesto underground & la filosofia della community
+                    {{ $page->subtitle ?? '[06] Il manifesto underground & la filosofia della community' }}
                 </p>
             </div>
             <div class="text-xs font-mono text-zinc-500 uppercase tracking-widest">

@@ -21,6 +21,9 @@
     } elseif (str_contains($currentRoute, 'admin.news')) {
         $guideTitle = "Guida: News & Comunicazioni Ufficiali";
         $guideContent = "Pubblica e modera articoli, comunicati e aggiornamenti per la community underground. Gli editor possono gestire le categorie assegnate e formattare i contenuti con anteprime e immagini.";
+    } elseif (str_contains($currentRoute, 'admin.pages')) {
+        $guideTitle = "Guida: Pagine Statiche";
+        $guideContent = "Gestisci i contenuti delle pagine pubbliche come Progetto (/project) e Supporto (/support). Super Admin ed Editor possono modificare titoli, tagline e testi principali visibili alla community.";
     } elseif (str_contains($currentRoute, 'admin.stats')) {
         $guideTitle = "Guida: Statistiche & Analitica";
         $guideContent = "Monitoraggio in tempo reale del traffico web, delle visite negli ultimi 30 giorni, dei tempi di permanenza (minimo, medio, massimo), della composizione dei visitatori (Artisti vs Anonimi), dei dispositivi e dei top referrer.";

@@ -14,10 +14,10 @@
         <div class="mb-12 border-b border-white/10 pb-8 text-center">
             <span class="ds-badge px-3 py-1 text-[10px] mb-4 inline-block">Community & Independence</span>
             <h1 class="text-4xl md:text-6xl font-black uppercase italic tracking-tighter text-white">
-                {{ __('messages.support.title') }}
+                {{ $page->title ?? __('messages.support.title') }}
             </h1>
             <p class="text-xs text-[#d9ff00] uppercase tracking-widest mt-3 font-bold italic">
-                [SUPPORT-01] {{ __('messages.support.subtitle') }}
+                {{ $page->subtitle ?? '[SUPPORT-01] ' . __('messages.support.subtitle') }}
             </p>
         </div>
 
