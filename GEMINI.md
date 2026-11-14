@@ -24,3 +24,9 @@
 - **Media Pipeline:** Usare sempre `ImageOptimizerService::optimizeAndStore()` per gli upload immagini e `ImageOptimizerService::placeholderUrl()` come fallback.
 - **Backup:** Comando disponibile `php artisan rude:backup --type=daily` e `--type=weekly`.
 - **Regola Esecuzione:** Gemini CLI modifica solo i file di codice; comandi `php artisan`, `npm run build`, `chown` e `git` vengono eseguiti manualmente dall'utente.
+
+## 6. Stato Consolidato al 14 Novembre 2026
+- **Navigazione Admin Compatta:** Voci barra superiore abbreviate (`DASHBOARD`, `ARTISTI`, `TRACCE`, `PLAYLIST`, `CONTEST`, `NEWS`, `PAGES`, `STATS`, `USERS`) filtrate per ruolo RBAC, affiancate da `[ ? GUIDA ]`, pill email utente ed `ESCI`.
+- **Player Globale:** Componente `app/Livewire/Player.php` + `resources/views/livewire/player.blade.php` persistente su tutto il frontend con coda JSON (`#rude-tracks-data`) e funzione globale `window.playRudeTrack(idOrObj)`.
+- **Pagine Dinamiche & Modifica Tracce:** `/project` e `/support` leggono da `StaticPage`; le tracce in `/admin` supportano la modifica completa dei metadati (`admin.radio.edit`).
+- **Documentazione Utenti:** Manuale operativo completo disponibile in `docs/GUIDA_UTENTI_RUDE_HZ.md`.

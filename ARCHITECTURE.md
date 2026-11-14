@@ -74,3 +74,12 @@ Riservato esclusivamente agli amministratori (`is_admin = true`):
 - **Media Pipeline WebP:** Integrato `App\Services\ImageOptimizerService` (Intervention Image v4) per la conversione e il ridimensionamento automatico in `.webp` di tutti gli upload, con placeholder ufficiale `public/images/rude-hz-placeholder.webp`.
 - **Backup Automatici (`rude:backup`):** Comando Artisan schedulabile (`--type=daily|weekly`) per backup atomici SQLite ed export JSON in `database/backups/` (rotazione ultimi 14).
 - **Email Verification & Supporto:** Attivato `MustVerifyEmail` via Resend SMTP (`://resend.com`) e link donazioni PayPal configurabile (`PAYPAL_DONATE_URL`).
+
+---
+
+## Aggiornamento Finale Sessione (14 Novembre 2026)
+- **Gestione Pagine Statiche (`PAGES`):** Creata tabella `static_pages`, modello `StaticPage` e controller `Admin\StaticPageController` (`/admin/pages`) accessibile a `super_admin` ed `editor` per modificare dinamicamente i contenuti delle pagine `/project` e `/support`.
+- **Modifica Tracce Admin (`EDIT`):** Aggiunti metodi `edit` e `update` su `AdminRadioController` e vista `resources/views/admin/radio/edit.blade.php` per modificare titolo, artista assegnato, genere e copertina dei brani già caricati.
+- **Player Audio Persistente (`rudePlayer()`):** Player globalizzato tramite `@persist('rude-global-player')` e `wire:navigate`, gestito interamente lato client con Alpine.js (`rude-tracks-data`), partenza casuale iniziale, controlli coda e cambio brano istantaneo (`window.playRudeTrack`).
+- **Sfondo Vector Arcade & Layout Frontend:** Implementato `resources/js/arcade-background.js` (60fps vettoriale con ammiraglia, UFO, caccia difensore, raggi laser e luna), rimosso footer ridondante e integrato link `SUPPORT` nella navbar superiore e nel menu hamburger mobile.
+- **Area Artista `/my-studio`:** Allineata la barra superiore al design system Dark Cyber-Tech e creata vista interna `/my-studio/contests` (`resources/views/studio/contests.blade.php`).
