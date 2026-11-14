@@ -33,7 +33,7 @@
             </div>
         </div>
 
-        <!-- Cards Statistiche -->
+        <!-- Cards Statistiche Interamente Cliccabili -->
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-12">
             @php 
                 $allStats = [
@@ -42,7 +42,7 @@
                     ['label' => 'Contest', 'value' => \App\Models\Contest::count(), 'link' => route('admin.contests.index'), 'color' => 'black'],
                     ['label' => 'Tracce Tot.', 'value' => \App\Models\Track::count(), 'link' => route('admin.radio.archive'), 'color' => 'black'],
                     ['label' => 'News', 'value' => \App\Models\News::count(), 'link' => route('admin.news.index'), 'color' => 'black'],
-                    ['label' => 'Playlists', 'value' => \App\Models\Playlist::count(), 'link' => '#', 'color' => 'black']
+                    ['label' => 'Playlists', 'value' => \App\Models\Playlist::count(), 'link' => route('admin.playlists.index'), 'color' => 'black']
                 ];
 
                 $user = auth()->user();
@@ -56,15 +56,13 @@
             @endphp
 
             @foreach($stats as $stat)
-            <div class="bg-zinc-950 border border-white/10 rounded-md p-5 shadow-xl hover:border-[#d9ff00]/50 transition backdrop-blur-md">
+            <a href="{{ $stat['link'] }}" class="block bg-zinc-950 border border-white/10 rounded-md p-5 shadow-xl hover:border-[#E6FF00] transition backdrop-blur-md group">
                 <p class="text-[9px] font-mono font-bold text-zinc-400 uppercase tracking-widest mb-2">{{ $stat['label'] }}</p>
                 <div class="flex justify-between items-end">
                     <h3 class="text-3xl font-black text-white font-mono leading-none">{{ $stat['value'] }}</h3>
-                    @if($stat['link'] !== '#')
-                        <a href="{{ $stat['link'] }}" class="text-xs font-mono font-bold text-[#d9ff00] hover:text-white transition">→</a>
-                    @endif
+                    <span class="text-xs font-mono font-bold text-[#E6FF00] group-hover:translate-x-1 transition-transform">→</span>
                 </div>
-            </div>
+            </a>
             @endforeach
         </div>
     </div>

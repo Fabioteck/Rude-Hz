@@ -10,7 +10,7 @@
 <body class="bg-[#0A0A0A] font-sans antialiased text-gray-100 min-h-screen">
 
     <!-- DARK CYBER-TECH ADMIN NAV -->
-    <nav class="bg-[#121212] border-b border-[#1F1F1F] sticky top-0 z-50">
+    <nav x-data="{ open: false }" class="bg-[#121212] border-b border-[#1F1F1F] sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between h-16 items-center">
                 
@@ -60,17 +60,52 @@
                     @endforeach
                 </div>
 
-                <!-- User, Guide & Logout -->
-                <div class="flex items-center gap-3">
+                <!-- User, Guide, Logout & Mobile Hamburger -->
+                <div class="flex items-center gap-2 md:gap-3">
                     <x-admin-guide />
-                    <span class="border border-[#00FF66]/40 text-[#00FF66] px-2.5 py-1 rounded text-[10px] font-mono">{{ auth()->user()->email }}</span>
+                    <span class="border border-[#00FF66]/40 text-[#00FF66] px-2 py-1 rounded text-[10px] font-mono max-w-[120px] truncate" title="{{ auth()->user()->email }}">{{ auth()->user()->email }}</span>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="bg-zinc-900 border border-red-500/30 hover:bg-red-600 text-red-400 hover:text-white font-mono font-bold uppercase text-[10px] tracking-wider px-3 py-1.5 rounded transition-colors">
+                        <button type="submit" class="bg-zinc-900 border border-red-500/30 hover:bg-red-600 text-red-400 hover:text-white font-mono font-bold uppercase text-[9px] tracking-wider px-2 py-1 rounded transition-colors">
                             Esci
                         </button>
                     </form>
+
+                    <!-- Hamburger Mobile Button -->
+                    <div class="flex md:hidden ml-1">
+                        <button @click="open = !open" 
+                                type="button" 
+                                class="text-white hover:text-[#E6FF00] focus:outline-none p-1 bg-transparent" 
+                                aria-label="Toggle menu">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path x-show="!open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                <path x-show="open" x-cloak stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Mobile Dropdown Panel -->
+        <div x-show="open" 
+             x-cloak
+             x-transition:enter="transition ease-out duration-200"
+             x-transition:enter-start="opacity-0 -translate-y-2"
+             x-transition:enter-end="opacity-100 translate-y-0"
+             x-transition:leave="transition ease-in duration-150"
+             x-transition:leave-start="opacity-100 translate-y-0"
+             x-transition:leave-end="opacity-0 -translate-y-2"
+             @click.away="open = false"
+             class="absolute top-full left-0 w-full bg-[#121212] border-b border-[#1F1F1F] z-40 md:hidden font-mono text-xs uppercase font-bold tracking-wider">
+            <div class="px-6 py-4 space-y-3 flex flex-col">
+                @foreach($links as $link)
+                    <a href="{{ route($link['route']) }}" 
+                       @click="open = false"
+                       class="py-2 border-b border-white/5 {{ (isset($link['match']) ? request()->is($link['match']) : request()->routeIs($link['route'])) ? 'text-[#E6FF00]' : 'text-zinc-300' }} hover:text-[#E6FF00]">
+                        {{ $link['label'] }}
+                    </a>
+                @endforeach
             </div>
         </div>
     </nav>

@@ -32,8 +32,8 @@
 
 <div x-data="{ guideOpen: false }" class="relative inline-block">
     <!-- BOTTONE GUIDA NELLA NAVBAR ADMIN -->
-    <button @click="guideOpen = true" type="button" class="px-3 py-1.5 bg-zinc-900 border border-[#E6FF00]/40 text-[#E6FF00] hover:bg-[#E6FF00] hover:text-black font-mono font-bold uppercase text-[10px] tracking-wider rounded transition-colors flex items-center gap-1.5 shadow-[0_0_10px_rgba(230,255,0,0.15)]">
-        <span>[ ? GUIDA ]</span>
+    <button @click="guideOpen = true" type="button" class="w-7 h-7 bg-zinc-900 border border-[#E6FF00]/40 text-[#E6FF00] hover:bg-[#E6FF00] hover:text-black font-mono font-bold uppercase text-xs rounded transition-colors flex items-center justify-center shadow-[0_0_10px_rgba(230,255,0,0.15)]" title="Guida">
+        ?
     </button>
 
     <!-- OVERDROP / BACKDROP -->

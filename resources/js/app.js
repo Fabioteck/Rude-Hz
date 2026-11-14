@@ -1,4 +1,5 @@
 import './bootstrap';
+import './arcade-background';
 
 import Alpine from 'alpinejs';
 

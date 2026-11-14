@@ -82,7 +82,7 @@
                         <!-- Azione Ascolta (Micro-icona geometrica) -->
                         <td class="py-4 px-4 text-right">
                             <button type="button" 
-                                    onclick="Livewire.dispatch('playTrack', { trackId: {{ $track->id }} })"
+                                    onclick="playRudeTrack({{ $track->id }})"
                                     class="inline-flex items-center justify-center w-8 h-8 bg-zinc-900 border border-white/20 text-[#d9ff00] group-hover:bg-[#d9ff00] group-hover:text-black group-hover:border-[#d9ff00] transition-all rounded-sm shadow-sm"
                                     title="Ascolta traccia">
                                 <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>

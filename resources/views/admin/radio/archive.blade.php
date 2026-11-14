@@ -63,6 +63,9 @@
                         <!-- Console Azioni -->
                         <td class="px-6 py-4 text-right">
                             <div class="flex justify-end items-center space-x-2">
+                                <a href="{{ route('admin.radio.tracks.edit', $track) }}" class="flex items-center text-[10px] font-mono font-black uppercase bg-zinc-900 border border-zinc-700 text-[#E6FF00] px-3 py-1.5 rounded hover:border-[#E6FF00] transition-colors">
+                                    Edit ✏️
+                                </a>
                                 <form action="{{ route('admin.radio.approve', $track) }}" method="POST">
                                     @csrf
                                     @method('PATCH')

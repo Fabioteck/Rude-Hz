@@ -140,6 +140,13 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/tracks/{track}', [\App\Http\Controllers\User\TrackUploadController::class, 'destroy'])->name('user.track.destroy');
         Route::get('/tracks/{track}/edit', [App\Http\Controllers\User\TrackUploadController::class, 'edit'])->name('user.track.edit');
         Route::post('/update-artist', [\App\Http\Controllers\ArtistController::class, 'updateArtist'])->name('user.update.artist');
+        Route::get('/contests', function () {
+            $user = auth()->user();
+            $contests = Contest::where('is_active', true)->latest()->get();
+            $userTracks = $user->artist ? $user->artist->tracks()->latest()->get() : collect();
+            return view('studio.contests', compact('contests', 'userTracks'));
+        })->name('user.contests.index');
+
         Route::post('/contests/{contest}/join', [\App\Http\Controllers\ContestController::class, 'join'])->name('contests.join');
     });
 
@@ -155,6 +162,8 @@ Route::middleware(['auth'])->group(function () {
         // GESTIONE RADIO
         Route::prefix('radio')->name('radio.')->group(function () {
             Route::get('/archive', [RadioController::class, 'archive'])->name('archive');
+            Route::get('/tracks/{track}/edit', [RadioController::class, 'edit'])->name('tracks.edit');
+            Route::put('/tracks/{track}', [RadioController::class, 'update'])->name('tracks.update');
             Route::patch('/approve/{track}', [RadioController::class, 'toggleApprove'])->name('approve');
             Route::patch('/tracks/{track}/toggle-active', [RadioController::class, 'toggleActive'])->name('tracks.toggle-active');
             Route::delete('/destroy/{track}', [RadioController::class, 'destroy'])->name('destroy');

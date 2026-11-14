@@ -23,13 +23,16 @@
 </head>
 <body class="bg-[#0a0a0a] text-white">
 
+    <!-- SFONDO VETTORIALE SPAZIALE CANVAS (60fps 80s Arcade) -->
+    <canvas id="network-canvas" style="position: fixed; inset: 0; pointer-events: none; z-index: 15;"></canvas>
+
     <!-- NAVIGAZIONE RESPONSIVE STRUTTURATA (Stato inizializzato SOLO qui) -->
-    <nav x-data="{ open: false }" class="sticky top-0 z-50 relative bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10">
+    <nav x-data="{ open: false }" class="sticky top-0 z-40 relative bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-4 h-20 flex justify-between items-center relative">
             
             <!-- LOGO -->
-            <a href="{{ route('home') }}" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-full border-2 border-[#00FF66] overflow-hidden bg-[#0a0a0a] shadow-[0_0_12px_rgba(0,255,102,0.4)] shrink-0 flex items-center justify-center">
+            <a href="{{ route('home') }}" wire:navigate class="flex items-center gap-3 group">
+                <div class="w-10 h-10 rounded-full border border-white/20 hover:border-[#E6FF00] overflow-hidden bg-[#0a0a0a] shrink-0 flex items-center justify-center transition-colors">
                     <img src="{{ asset('images/rudealien.jpeg') }}" alt="Rude-Hz Alien" class="w-full h-full object-cover">
                 </div>
                 <span class="text-2xl font-black text-[#d9ff00] uppercase italic tracking-tighter group-hover:text-white transition-colors">Rude-Hz</span>
@@ -37,11 +40,12 @@
             
             <!-- LINK DESKTOP -->
             <div class="hidden md:flex space-x-8 uppercase text-xs tracking-widest font-bold font-mono italic">
-                <a href="{{ route('project') }}" class="hover:text-[#d9ff00] transition {{ request()->routeIs('project') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.project') }}</a>
-                <a href="{{ route('artists.index') }}" class="hover:text-[#d9ff00] transition {{ request()->routeIs('artists.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.artists') }}</a>
-                <a href="{{ route('playlists.index') }}" class="hover:text-[#d9ff00] transition {{ request()->routeIs('playlists.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.playlists') }}</a>
-                <a href="{{ route('tracks.index') }}" class="hover:text-[#d9ff00] transition {{ request()->routeIs('tracks.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.tracks') }}</a>
-                <a href="{{ route('news.index') }}" class="hover:text-[#d9ff00] transition {{ request()->routeIs('news.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.news') }}</a>
+                <a href="{{ route('project') }}" wire:navigate class="hover:text-[#d9ff00] transition {{ request()->routeIs('project') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.project') }}</a>
+                <a href="{{ route('artists.index') }}" wire:navigate class="hover:text-[#d9ff00] transition {{ request()->routeIs('artists.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.artists') }}</a>
+                <a href="{{ route('playlists.index') }}" wire:navigate class="hover:text-[#d9ff00] transition {{ request()->routeIs('playlists.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.playlists') }}</a>
+                <a href="{{ route('tracks.index') }}" wire:navigate class="hover:text-[#d9ff00] transition {{ request()->routeIs('tracks.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.tracks') }}</a>
+                <a href="{{ route('news.index') }}" wire:navigate class="hover:text-[#d9ff00] transition {{ request()->routeIs('news.*') ? 'text-[#d9ff00]' : '' }}">{{ __('messages.menu.news') }}</a>
+                <a href="{{ route('support') }}" wire:navigate class="hover:text-[#d9ff00] transition {{ request()->routeIs('support') ? 'text-[#d9ff00]' : '' }}">SUPPORT</a>
             </div>
 
             <!-- BOTTONE UTENTE DESKTOP & BANDIERE SVG -->
@@ -78,11 +82,11 @@
 
                 @if (Route::has('login'))
                     @auth
-                        <a href="{{ route('dashboard') }}" class="text-xs font-mono font-bold text-[#d9ff00] hover:text-white transition uppercase italic border border-[#d9ff00]/30 px-4 py-2 rounded-md">
+                        <a href="{{ route('dashboard') }}" wire:navigate class="text-xs font-mono font-bold text-[#d9ff00] hover:text-white transition uppercase italic border border-[#d9ff00]/30 px-4 py-2 rounded-md">
                             {{ Auth::user()->is_admin ? 'CONSOLE' : 'My Studio' }}
                         </a>
                     @else
-                        <a href="{{ route('login') }}" class="text-xs font-mono uppercase italic font-bold text-white hover:text-[#d9ff00] transition">{{ __('messages.menu.login') }}</a>
+                        <a href="{{ route('login') }}" wire:navigate class="text-xs font-mono uppercase italic font-bold text-white hover:text-[#d9ff00] transition">{{ __('messages.menu.login') }}</a>
                     @endauth
                 @endif
             </div>
@@ -111,27 +115,30 @@
              x-transition:leave-start="opacity-100 translate-y-0"
              x-transition:leave-end="opacity-0 -translate-y-2"
              @click.away="open = false"
-             class="absolute top-full left-0 w-full bg-[#0a0a0a] border-b border-white/10 z-40 md:hidden font-mono text-xs uppercase font-bold italic tracking-widest">
+             class="absolute top-full left-0 w-full bg-[#121212] border-b border-white/10 z-40 md:hidden font-mono text-xs uppercase font-bold italic tracking-widest">
             
-            <div class="px-6 pt-4 pb-6 space-y-4 flex flex-col bg-black">
-                <a href="{{ route('project') }}" @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('project') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">PROJECT</a>
-                <a href="{{ route('artists.index') }}" @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('artists.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">ARTISTS</a>
-                <a href="{{ route('playlists.index') }}" @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('playlists.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">PLAYLIST</a>
-                <a href="{{ route('tracks.index') }}" @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('tracks.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">TRACKS</a>
-                <a href="{{ route('news.index') }}" @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('news.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">NEWS</a>
+            <div class="px-6 pt-4 pb-6 space-y-4 flex flex-col bg-[#121212]">
+                <a href="{{ route('project') }}" wire:navigate @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('project') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">PROGETTO</a>
+                <a href="{{ route('artists.index') }}" wire:navigate @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('artists.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">ARTISTI</a>
+                <a href="{{ route('playlists.index') }}" wire:navigate @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('playlists.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">PLAYLIST</a>
+                <a href="{{ route('tracks.index') }}" wire:navigate @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('tracks.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">TRACCE</a>
+                <a href="{{ route('news.index') }}" wire:navigate @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('news.*') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">NEWS</a>
+                <a href="{{ route('support') }}" wire:navigate @click="open = false" class="py-2 border-b border-white/5 {{ request()->routeIs('support') ? 'text-[#d9ff00]' : 'text-white' }} hover:text-[#d9ff00]">SUPPORT</a>
                 
                 <div class="pt-4 flex flex-col gap-3">
                     @auth
-                        <a href="{{ route('dashboard') }}" @click="open = false" class="text-[#d9ff00] py-2 flex items-center justify-between border-t border-white/10">
-                            <span>{{ Auth::user()->is_admin ? 'CONSOLE' : 'MY STUDIO' }}</span>
-                            <span>⚡</span>
+                        <a href="{{ route('dashboard') }}" wire:navigate @click="open = false" class="text-black bg-[#E6FF00] py-3 px-4 rounded text-center font-black transition hover:bg-white">
+                            {{ Auth::user()->is_admin ? 'CONSOLE ADMIN' : 'MY STUDIO' }} ⚡
                         </a>
                     @else
-                        <a href="{{ route('login') }}" @click="open = false" class="text-white py-2 border-t border-white/10">LOGIN</a>
+                        <div class="grid grid-cols-2 gap-3 pt-2">
+                            <a href="{{ route('login') }}" wire:navigate @click="open = false" class="text-center py-3 bg-zinc-900 border border-white/20 text-white rounded font-black hover:border-[#E6FF00] hover:text-[#E6FF00] transition">ACCEDI</a>
+                            <a href="{{ route('register') }}" wire:navigate @click="open = false" class="text-center py-3 bg-[#E6FF00] text-black rounded font-black hover:bg-white transition">REGISTRATI</a>
+                        </div>
                     @endauth
 
                     <div class="pt-4 border-t border-white/10 flex items-center justify-between">
-                        <span class="text-zinc-500 text-[10px]">LANGUAGE</span>
+                        <span class="text-zinc-500 text-[10px]">LINGUA / LANGUAGE</span>
                         <div class="flex items-center gap-3">
                             <a href="{{ route('lang.switch', 'it') }}" title="Italiano">
                                 <svg class="w-6 h-4 rounded-sm overflow-hidden border {{ app()->getLocale() == 'it' ? 'border-[#00FF66]' : 'border-white/20 opacity-60' }}" viewBox="0 0 3 2">
@@ -156,179 +163,14 @@
     </nav>
 
     <!-- PUNTO DI INIEZIONE DEL CONTENUTO -->
-    <main class="pb-24">
+    <main class="relative z-20 pb-24">
         @yield('content')
     </main>
 
     <!-- LIVEWIRE PLAYER PERSISTENTE GLOBALE -->
-    @livewire('player')
-
-    <!-- FOOTER (Senza lingue) -->
-    <footer class="bg-[#050505] py-12 border-t border-white/5 font-mono">
-        <div class="max-w-7xl mx-auto px-4 flex flex-col md:flex-row items-center justify-between gap-4 text-gray-500 text-xs tracking-widest uppercase">
-            <div>
-                &copy; {{ date('Y') }} <a href="https://rude-hz.it" class="text-[#00FF66] hover:text-white transition">Rude-Hz Community</a> - Coded by <a href="https://fabioteck.it" class="text-[#00FF66] hover:text-white transition">FabioTeck</a>
-            </div>
-            <div>
-                <a href="{{ route('support') }}" class="text-[#00FF66] hover:text-white transition font-bold">SUPPORT RUDE-HZ →</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- 80S ARCADE SPACE BACKGROUND CANVAS ANIMATION SCRIPT -->
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const canvas = document.getElementById('network-canvas');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-
-            let width, height;
-            let stars = [];
-            let invaders = [];
-            let ufo = { x: -50, y: 80, speed: 1.2 };
-            let astronaut = { x: 80, y: 150 };
-            let mouse = { x: null, y: null, radius: 180 };
-
-            const fluoColors = ['#00FF66', '#FF007F', '#9D00FF', '#E6FF00'];
-
-            function resize() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
-
-                stars = [];
-                const count = Math.min(Math.floor((width * height) / 12000), 100);
-                for (let i = 0; i < count; i++) {
-                    stars.push({
-                        x: Math.random() * width,
-                        y: Math.random() * height,
-                        size: Math.random() * 2 + 0.5,
-                        color: fluoColors[Math.floor(Math.random() * fluoColors.length)],
-                        alpha: Math.random(),
-                        pulse: Math.random() * 0.02 + 0.005
-                    });
-                }
-
-                invaders = [];
-                const rows = 2;
-                const cols = 5;
-                for (let r = 0; r < rows; r++) {
-                    for (let c = 0; c < cols; c++) {
-                        invaders.push({
-                            baseX: c * 50 + 60,
-                            baseY: r * 40 + 70,
-                            color: fluoColors[(r + c) % fluoColors.length]
-                        });
-                    }
-                }
-            }
-
-            window.addEventListener('resize', resize);
-            resize();
-
-            window.addEventListener('mousemove', (e) => {
-                mouse.x = e.clientX;
-                mouse.y = e.clientY;
-            });
-
-            window.addEventListener('mouseleave', () => {
-                mouse.x = null;
-                mouse.y = null;
-            });
-
-            function animate() {
-                ctx.clearRect(0, 0, width, height);
-
-                // 1. Stelle fluo reattive al mouse
-                stars.forEach(star => {
-                    star.alpha += star.pulse;
-                    if (star.alpha > 1 || star.alpha < 0.2) star.pulse *= -1;
-
-                    let dx = mouse.x !== null ? mouse.x - star.x : 0;
-                    let dy = mouse.y !== null ? mouse.y - star.y : 0;
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-                    if (mouse.x !== null && dist < mouse.radius) {
-                        star.x -= (dx / dist) * 0.4;
-                        star.y -= (dy / dist) * 0.4;
-                    }
-
-                    ctx.beginPath();
-                    ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
-                    ctx.fillStyle = star.color;
-                    ctx.globalAlpha = star.alpha;
-                    ctx.shadowColor = star.color;
-                    ctx.shadowBlur = 6;
-                    ctx.fill();
-                    ctx.globalAlpha = 1.0;
-                    ctx.shadowBlur = 0;
-                });
-
-                // 2. Luna retrò 80s
-                ctx.save();
-                let moonX = width - 100, moonY = 100, moonR = 40;
-                let moonGrad = ctx.createRadialGradient(moonX - 10, moonY - 10, 5, moonX, moonY, moonR);
-                moonGrad.addColorStop(0, '#E6FF00');
-                moonGrad.addColorStop(0.7, '#FF007F');
-                moonGrad.addColorStop(1, '#9D00FF');
-                ctx.fillStyle = moonGrad;
-                ctx.shadowColor = '#FF007F';
-                ctx.shadowBlur = 15;
-                ctx.beginPath();
-                ctx.arc(moonX, moonY, moonR, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-
-                // 3. UFO fluttuante
-                ufo.x += ufo.speed;
-                if (ufo.x > width + 80) ufo.x = -80;
-                ctx.save();
-                ctx.fillStyle = '#00FF66';
-                ctx.shadowColor = '#00FF66';
-                ctx.shadowBlur = 10;
-                ctx.beginPath();
-                ctx.ellipse(ufo.x, ufo.y + Math.sin(Date.now() * 0.004) * 6, 26, 8, 0, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.fillStyle = '#FF007F';
-                ctx.beginPath();
-                ctx.arc(ufo.x, ufo.y - 3 + Math.sin(Date.now() * 0.004) * 6, 10, Math.PI, 0, false);
-                ctx.fill();
-                ctx.restore();
-
-                // 4. Space Invaders flottanti
-                let time = Date.now() * 0.001;
-                let wave = Math.sin(time) * 30;
-                invaders.forEach((inv, i) => {
-                    let cx = inv.baseX + wave;
-                    let cy = inv.baseY + Math.cos(time + i) * 4;
-                    ctx.fillStyle = inv.color;
-                    ctx.shadowColor = inv.color;
-                    ctx.shadowBlur = 5;
-                    ctx.fillRect(cx, cy, 5, 5);
-                    ctx.fillRect(cx + 10, cy, 5, 5);
-                    ctx.fillRect(cx + 3, cy + 5, 9, 5);
-                    ctx.fillRect(cx, cy + 10, 15, 5);
-                    ctx.shadowBlur = 0;
-                });
-
-                // 5. Astronauta fluttuante
-                astronaut.x += Math.sin(Date.now() * 0.0009) * 0.2;
-                astronaut.y += Math.cos(Date.now() * 0.0007) * 0.2;
-                ctx.save();
-                ctx.translate((width * 0.1) + astronaut.x, (height * 0.5) + astronaut.y);
-                ctx.fillStyle = '#9D00FF';
-                ctx.shadowColor = '#00FF66';
-                ctx.shadowBlur = 8;
-                ctx.fillRect(-8, -12, 16, 20);
-                ctx.fillStyle = '#E6FF00';
-                ctx.beginPath();
-                ctx.arc(0, -15, 8, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-
-                requestAnimationFrame(animate);
-            }
-            animate();
-        });
-    </script>
+    @persist('rude-global-player')
+        @livewire('player')
+    @endpersist
 
 </body>
 </html>

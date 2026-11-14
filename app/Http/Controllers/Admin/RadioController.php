@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Track;
+use App\Models\Artist;
+use App\Services\ImageOptimizerService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +35,6 @@ class RadioController extends Controller
      */
     public function index()
     {
-        // Nota: Assicurati che il percorso del file sia corretto (solitamente admin.dashboard)
         return view('admin.dashboard'); 
     }
 
@@ -54,6 +55,50 @@ class RadioController extends Controller
             ->withQueryString();
 
         return view('admin.radio.archive', compact('tracks', 'search'));
+    }
+
+    /**
+     * EDIT FORM TRACCIA
+     */
+    public function edit($id)
+    {
+        $track = Track::with('artist')->findOrFail($id);
+        $artists = Artist::orderBy('name')->get();
+        return view('admin.radio.edit', compact('track', 'artists'));
+    }
+
+    /**
+     * UPDATE TRACCIA
+     */
+    public function update(Request $request, $id)
+    {
+        $track = Track::findOrFail($id);
+        
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'artist_id' => 'nullable|exists:artists,id',
+            'genre' => 'nullable|string|max:100',
+            'cover' => 'nullable|image|max:5120',
+        ]);
+
+        $track->title = $request->input('title');
+        $track->artist_id = $request->input('artist_id');
+        $track->genre = $request->input('genre');
+
+        if ($request->hasFile('cover')) {
+            if ($track->cover_path) {
+                Storage::disk('public')->delete($track->cover_path);
+            }
+            $track->cover_path = ImageOptimizerService::optimizeAndStore(
+                $request->file('cover'),
+                'covers'
+            );
+        }
+
+        $track->save();
+        $this->syncRaspberryPlaylist();
+
+        return redirect()->route('admin.radio.archive')->with('success', 'Traccia aggiornata con successo.');
     }
 
     public function toggleActive(Track $track)

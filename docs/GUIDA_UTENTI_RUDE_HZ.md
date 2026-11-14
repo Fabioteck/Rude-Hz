@@ -1,87 +1,110 @@
-# RUDE-HZ — Manuale Operativo & Guida alla Piattaforma
-**Versione:** 1.0 (Produzione) | **Dominio:** https://rude-hz.it  
-**Target:** Community Tekno, Acid, Industrial & Cultura Underground
+# 🎧 RUDE-HZ — Manuale Operativo Ufficiale & Guida alla Piattaforma
+**Piattaforma:** https://www.rude-hz.it | **Versione:** 1.0 Production  
+**Motto:** *The Harder Side of Sound — Born in WhatsApp, Raised in Techno.*
 
 ---
 
-## 1. Il Progetto Rude-Hz: Visione e Obiettivi
-**Rude-Hz** (*The Harder Side of Sound*) nasce come spazio digitale indipendente dedicato alla musica elettronica underground, alle sonorità Tekno/Acid/Industrial e alla cultura rave consapevole.  
-A differenza delle piattaforme commerciali, Rude-Hz è progettato per dare voce diretta agli artisti, ai collettivi e ai divulgatori senza algoritmi opachi:
-* **Vetrina Musicale & Streaming Continuo:** Gli ascoltatori possono esplorare artisti, tracce singole e playlist curate con un player audio sempre attivo durante la navigazione.
-* **Redazione & Cultura:** Una sezione editoriale dedicata a storia della musica elettronica, approfondimenti tecnici, diritti d'autore/royalty e riduzione del danno / informazione consapevole.
-* **Arene Creative (Contest):** Spazio dedicato a remix challenge e contest di produzione musicale per la community.
-* **Sostegno Indipendente:** Il progetto è autofinanziato e supportato direttamente dalla community tramite donazioni volontarie nella sezione *Support*.
+## Indice dei Contenuti
+1. **Il Progetto Rude-Hz: Visione, Valori e Navigazione Pubblica**
+2. **Guida per Ascoltatori & Artisti (`/my-studio`)**
+3. **Guida per la Redazione / Editor (`/admin`)**
+4. **Guida per i Curatori Musicali / Curator (`/admin`)**
+5. **Guida per l'Amministratore Globale / Super Admin (`/admin`)**
 
 ---
 
-## 2. Guida per gli Utenti & Artisti (`/my-studio`)
+## 1. Il Progetto Rude-Hz: Visione, Valori e Navigazione Pubblica
 
-### A. Registrazione e Attivazione Account
-1. Clicca su **Registrati** nella barra in alto o nella schermata di accesso.
-2. Inserisci il tuo **Nome d'Arte**, un'email valida e una password sicura.
-3. Controlla la tua casella di posta (inclusa la cartella *Spam* al primo invio) e clicca sul pulsante **Verify Email Address**.
-4. **Accesso immediato allo Studio:** Una volta verificata l'email, puoi accedere subito alla tua area riservata **`/my-studio`**.
-5. **Visibilità Pubblica:** Per tutelare la qualità della piattaforma, i nuovi profili nascono in stato *"In Revisione"* (`OFF`). Puoi già compilare tutti i tuoi dati e caricare i brani, ma il tuo profilo diventerà visibile al pubblico solo dopo l'approvazione da parte dello staff.
+### A. Cos'è Rude-Hz
+**Rude-Hz** è una piattaforma indipendente nata per dare struttura, identità e voce alla scena underground **Tekno, Acid, Hard Tekno e Industrial**, superando i limiti delle chat frammentate e degli algoritmi commerciali.  
+Il portale unisce in un unico spazio:
+* **Musica Indipendente:** Streaming continuo dei master caricati dagli artisti della community, senza pubblicità né logiche commerciali.
+* **Cultura & Divulgazione:** Articoli tecnici, storia della musica elettronica, approfondimenti su diritti d'autore/royalty e informazione sulla riduzione del danno.
+* **Partecipazione Attiva:** Arene creative e contest di produzione musicale.
+* **Sostegno dal Basso:** Un modello autofinanziato dalla community attraverso la sezione **Support**, per coprire i costi reali di server, sviluppo e mantenimento.
 
-### B. Gestione Profilo & Caricamento Musica (`/my-studio`)
-All'interno della tua console personale hai due sezioni principali:
-* **Sezione ARTIST (Identità & Bio):**
-  * Compila la tua biografia e inserisci i tuoi collegamenti esterni (SoundCloud, Spotify, Instagram, YouTube, chiave pubblica Nostr o indirizzo Lightning).
-  * Carica il tuo **Avatar** e la tua **Immagine di Copertina**: il sistema li ottimizzerà e convertirà automaticamente in formato leggero ad alta velocità per dispositivi mobili.
-* **Sezione TRACKS (Caricamento Brani):**
-  * Carica i tuoi file audio (formato **MP3**), indica il titolo, il genere musicale (es. *Acid Tekno*, *Hard Tekno*, *Industrial*) e carica una copertina dedicata (se non ne hai una, verrà assegnata l'immagine ufficiale Rude-Hz).
+### B. Come Funziona il Sito Pubblico
+* **Player Audio Persistente (Barra Inferiore):** È sempre attivo durante tutta la navigazione. Al primo clic sulla pagina avvia la rotazione musicale e ti permette di cambiare brano, mettere in pausa, scorrere la traccia o regolare il volume mentre esplori qualsiasi sezione del sito senza interrompere l'ascolto.
+* **Multilingua Automatico (`IT` / `EN` / `ES`):** Cliccando sulle bandiere in alto a destra puoi leggere interfaccia e contenuti in Italiano, Inglese o Spagnolo.
+* **Sezioni Principali:**
+  * **Progetto:** Il manifesto e la storia dell'iniziativa.
+  * **Artisti:** L'elenco dei producer attivi, con biografia, tracce e collegamenti diretti.
+  * **Playlist:** Le selezioni ufficiali curate dallo staff.
+  * **Tracce:** L'archivio completo dei brani approvati in rotazione.
+  * **News:** Il magazine editoriale della community.
+  * **Support:** La pagina dedicata a chi desidera contribuire alle spese di gestione e sviluppo tramite donazione volontaria (PayPal).
+
+---
+
+## 2. Guida per Ascoltatori & Artisti (`/my-studio`)
+
+### A. Registrazione, Verifica Email e Attivazione
+1. Clicca su **Registrati** nella barra superiore (o nella schermata *Accedi*).
+2. Inserisci il tuo **Nome d'Arte**, un indirizzo email valido e una password.
+3. **Conferma Email:** Riceverai subito un'email da **Rude-Hz** con un pulsante di verifica (*controlla anche la cartella Spam al primo invio*). Clicca sul link per attivare l'account.
+4. **Accesso Immediato allo Studio:** Appena confermata l'email, puoi accedere subito alla tua area personale **`/my-studio`**.
+5. **Approvazione Pubblica:** Per garantire la qualità musicale del portale, i nuovi profili nascono in modalità *"In Revisione"* (`OFF`). Puoi già compilare tutti i tuoi dati e caricare i tuoi brani; appena lo staff avrà verificato il profilo, diventerai visibile a tutti nella sezione **Artisti**.
+
+### B. Gestione del Profilo Artista (`/my-studio`)
+* **Anagrafica & Biografia:** Inserisci la tua descrizione artistica e i tuoi link ufficiali (SoundCloud, Spotify, YouTube, Instagram).
+* **Web3 & Supporto Diretto:** Puoi indicare la tua chiave pubblica **Nostr (`npub`)** e il tuo **Lightning Address** per ricevere supporto diretto dagli ascoltatori.
+* **Avatar & Immagine di Copertina:** Carica le tue immagini dal dispositivo; il sistema le ottimizzerà automaticamente per garantire caricamenti istantanei anche da rete mobile.
+
+### C. Caricamento Tracce & Partecipazione ai Contest
+* **Le Mie Tracce:** Carica i tuoi brani in formato **MP3** (o WAV), specifica titolo, genere musicale e copertina. Finché non vengono approvati dai curatori restano contrassegnati come *In Revisione*.
+* **Contest:** Dalla sezione **Contest** della tua area studio puoi consultare le sfide creative aperte, selezionare una delle tue tracce e inviarla accettando la liberatoria prevista dal regolamento.
 
 ---
 
 ## 3. Guida per la Redazione / Editor (`/admin`)
-Gli utenti con ruolo **Editor** accedono al pannello `/admin` con una visuale mirata esclusivamente ai contenuti editoriali (**Dashboard, News, Contest**).
+Gli utenti con ruolo **Editor** accedono al pannello amministrativo con una barra dedicata esclusivamente ai contenuti redazionali: **`DASHBOARD`**, **`CONTEST`**, **`NEWS`**, **`PAGES`**.
 
-### A. Pubblicazione e Gestione Articoli (`NEWS`)
-1. Vai nella sezione **News** dalla barra superiore e clicca su **+ Nuova News**.
-2. **Categoria Editoriale:** Se ti è stata assegnata una rubrica specifica (es. *Storia della Techno*, *Riduzione del Danno*, *Tecnica & Produzione*, *Diritti & Royalty*), i tuoi articoli verranno collegati direttamente a quell'area tematica.
-3. **Compilazione:**
-   * **Titolo & Sottotitolo:** Usa titoli chiari e incisivi.
-   * **Contenuto:** Scrivi il testo dell'articolo in italiano (la piattaforma gestisce automaticamente la traduzione multilingua per i visitatori esteri).
-   * **Immagine di Copertina:** Carica un'immagine orizzontale; verrà ridimensionata e ottimizzata automaticamente dal sistema.
-4. Usa i pulsanti **Modifica** o **Elimina** nella lista per aggiornare o rimuovere gli articoli.
+### A. Gestione Articoli (`NEWS`)
+1. Entra in **News** e clicca su **+ Nuova News**.
+2. **Categoria Editoriale:** Se il tuo account è associato a una rubrica specifica, i tuoi articoli verranno pubblicati direttamente all'interno di quella categoria.
+3. **Composizione:** Inserisci titolo, sottotitolo, testo completo (scrivilo pure in italiano: il sistema traduce in automatico per gli utenti esteri) e un'immagine di copertina orizzontale.
+4. Puoi aggiornare o rimuovere i tuoi articoli in qualsiasi momento tramite i pulsanti **Modifica** ed **Elimina**.
 
-### B. Gestione Arene & Contest (`CONTEST`)
-1. Dalla sezione **Contest**, clicca su **+ Nuovo Contest** per avviare una nuova sfida creativa o remix contest.
-2. Imposta il titolo, il regolamento, le date di apertura/chiusura delle iscrizioni e le eventuali note legali/liberatorie per i partecipanti.
+### B. Gestione Pagine Istituzionali (`PAGES`)
+* Dalla sezione **Pages** puoi modificare i testi principali delle pagine **Progetto** e **Supporto**, mantenendo sempre aggiornato il manifesto della community e le informazioni per i sostenitori senza dover intervenire sul codice del sito.
+
+### C. Gestione Arene & Contest (`CONTEST`)
+* Dalla sezione **Contest** puoi creare nuove sfide musicali, definire il tema, impostare le date di apertura/chiusura e pubblicare il regolamento ufficiale.
 
 ---
 
-## 4. Guida per i Curatori Musicali (`/admin`)
-Gli utenti con ruolo **Curator** (A&R) gestiscono il catalogo musicale della piattaforma (**Dashboard, Artisti, Tracce, Playlist**).
+## 4. Guida per i Curatori Musicali / Curator (`/admin`)
+Gli utenti con ruolo **Curator** (A&R) gestiscono il catalogo sonoro e la direzione artistica del portale: **`DASHBOARD`**, **`ARTISTI`**, **`TRACCE`**, **`PLAYLIST`**.
 
-### A. Moderazione Artisti e Tracce (`ARTISTI` & `TRACCE`)
-* **Interruttore Rapido `ON ⚡ / OFF 💤`:** Ogni artista e ogni traccia nella lista dispone di un pulsante di stato istantaneo.
-  * Clicca su **`OFF 💤`** per portare lo stato su **`ON ⚡`**: l'artista o il brano diventa immediatamente visibile e ascoltabile sul sito pubblico.
-  * Clicca su **`ON ⚡`** per mettere temporaneamente in pausa un artista o un brano senza cancellare i suoi dati.
-* **Modifica Anagrafica:** Cliccando su **Modifica** puoi aiutare un artista a sistemare la biografia, i link o caricare al suo posto avatar e copertina.
+### A. Approvazione e Modifica Artisti (`ARTISTI`)
+* **Switch Rapido `ON ⚡ / OFF 💤`:** Nella lista artisti puoi attivare o mettere in pausa un profilo con un solo clic. Quando è su `ON ⚡`, l'artista è immediatamente pubblico.
+* **Modifica Profilo (`EDIT`):** Puoi entrare nella scheda di qualsiasi artista per aiutarlo a correggere testi, link o immagini.
 
-### B. Creazione Playlist Ufficiali (`PLAYLIST`)
+### B. Moderazione e Modifica Tracce (`TRACCE`)
+* **Approvazione (`ON ⚡`):** Ascolta i nuovi brani caricati dagli artisti e attiva lo switch su `ON ⚡` per mandarli in rotazione pubblica sul player e nell'archivio tracce.
+* **Modifica Metadati (`EDIT`):** Se un artista ha sbagliato il titolo del brano, il genere o la copertina, puoi correggerli direttamente cliccando su **`EDIT`**.
+
+### C. Creazione Playlist Ufficiali (`PLAYLIST`)
 1. Vai su **Playlist** → **+ Nuova Playlist**.
-2. Inserisci il nome della selezione (es. *Rude-Hz Hard Selection Vol. 1*), una breve descrizione e una copertina.
-3. Seleziona le tracce approvate da includere nella scaletta e salva. Puoi modificare l'ordine o aggiungere nuovi brani in qualsiasi momento tramite il tasto **Edit**.
+2. Inserisci titolo, descrizione, copertina e seleziona i brani approvati da inserire nella scaletta.
+3. Puoi riordinare o aggiornare le playlist in qualsiasi momento.
 
 ---
 
-## 5. Guida per l'Amministratore Globale (`SUPER_ADMIN`)
-Il **Super Admin** ha il controllo completo sull'infrastruttura, sullo staff e sulla sicurezza della piattaforma.
+## 5. Guida per l'Amministratore Globale / Super Admin (`/admin`)
+Il **Super Admin** ha accesso completo a tutte le aree operative, statistiche e di sicurezza della piattaforma.
 
-### A. Gestione Utenti, Staff e Permessi (`UTENTI`)
-Dalla voce **Utenti** nella barra superiore puoi amministrare tutti gli account registrati:
-* **Creazione Collaboratori (`+ Nuovo Utente`):** Crea un account per un nuovo membro del team assegnandogli il ruolo corretto:
-  * **`super_admin`:** Accesso totale a tutte le funzioni e impostazioni.
-  * **`editor`:** Accesso solo a *News* e *Contest* (con possibilità di vincolarlo a una specifica categoria editoriale).
-  * **`curator`:** Accesso solo a *Artisti*, *Tracce* e *Playlist*.
-  * **`artist`:** Accesso solo alla propria area personale `/my-studio`.
-  * **`listener`:** Utente semplice registrato (senza pannello artista).
-* **Sospensione Account:** Usa lo switch **`ON ⚡ / OFF 💤`** per abilitare o bloccare l'accesso di un utente.
-* **Rimozione Sicura Artisti:** Eliminando un profilo dalla sezione *Artisti*, vengono rimossi i suoi brani e file multimediali, mentre l'account utente rimane registrato come semplice `listener` per evitare re-iscrizioni indesiderate.
+### A. Gestione Utenti, Staff e Permessi (`USERS`)
+Dalla voce **Users** nella barra superiore puoi creare, modificare o sospendere qualsiasi account:
+* **`super_admin`:** Accesso completo a tutto il sistema.
+* **`editor`:** Accesso limitato a *News*, *Contest* e *Pages* (senza creare un profilo artista pubblico).
+* **`curator`:** Accesso limitato a *Artisti*, *Tracce* e *Playlist*.
+* **`artist`:** Accesso alla propria area personale `/my-studio`.
+* **`listener`:** Utente registrato base (senza area artista).
 
-### B. Monitoraggio Server & Statistiche (`STATISTICHE` & `DASHBOARD`)
-* **Stato Hardware:** Nel riquadro in alto a destra della Dashboard puoi tenere sotto controllo in tempo reale la temperatura e il carico CPU del server.
-* **Analitica Traffico:** Nella sezione **Statistiche** puoi consultare l'andamento delle visite negli ultimi 30 giorni, i tempi medi di permanenza, la ripartizione tra dispositivi mobile/desktop e le sorgenti di traffico.
-* **Guida Rapida Integrata:** In ogni pagina del pannello è sempre disponibile il pulsante **`[ ? GUIDA ]`** in alto a destra per consultare un promemoria contestuale o stampare la scheda operativa in PDF.
+*(Nota sulla sicurezza: eliminando un profilo dalla tabella **Artisti**, vengono rimossi i brani e i file multimediali collegati, mentre l'utenza resta nel sistema come `listener` per mantenere pulito lo storico).*
+
+### B. Analitica, Hardware & Aiuto Rapido (`STATS` & `?`)
+* **Monitoraggio Server:** Nella **Dashboard** principale puoi verificare in tempo reale temperatura e carico del server.
+* **Statistiche (`STATS`):** Grafici interattivi su visite degli ultimi 30 giorni, tempi di permanenza, dispositivi utilizzati e provenienza del traffico.
+* **Aiuto Contestuale (`?`):** In alto a destra nella barra di controllo è sempre presente il pulsante **`?`**, che apre una scheda operativa specifica per la pagina in cui ti trovi, stampabile o salvabile in PDF.
